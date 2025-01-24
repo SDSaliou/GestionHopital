@@ -1,0 +1,44 @@
+"use client";
+import React, { useEffect, useState} from "react";
+import HospitalisationList from "../../components/HospitalisationList";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import withRoleProtection from "@/app/components/protectionPage";
+import axios from "axios";
+
+
+
+const HospiPage: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const [hospitalisation, setHospitalisation] = useState([]);
+
+  const fetchHospi = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/hospitalisation/");
+      setHospitalisation(response.data);
+      console.log("Hospi récupérés :", response.data);
+      } catch (error) {
+        console.error('Erreur en récupérant les hospitalisations', error);
+        toast.error('Erreur lors de la récupérant');
+      }
+  }
+
+  useEffect(() => {
+    fetchHospi();
+  })
+
+  return (
+    <div className="flex flex-col items-center justify-center">
+      {loading ? (
+        <p>Chargement...</p>
+      ) : (
+        <HospitalisationList hospitalisations={hospitalisation} fetchHospi={fetchHospi} />
+      )}
+
+
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default withRoleProtection(HospiPage, ["Medecin"]);

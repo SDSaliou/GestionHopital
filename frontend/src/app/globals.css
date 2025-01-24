@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-image {
+  background-image: url('/Logo.PNG');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+::-webkit-scrollbar{
+  width: 6px;  /*largeur de la barre de défilement*/
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff; /*couleur de l'arrière-plan de la barre de defilement */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d6d4d4; /*couleur de la barre de défilement*/
+  border-radius: 10px; /*coins arrondis*/
+}
+
+::-webkit-scrollbar-thumb:hover {
+ background: #555;  /* couleur de la barre de défilement au survol */
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
