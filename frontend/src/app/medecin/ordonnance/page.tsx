@@ -7,11 +7,12 @@ import OrdonnanceList from "../../components/ordiList";
 import Link from "next/link";
 import withRoleProtection from "@/app/components/protectionPage";
 
+
+
 const Ordonnance: React.FC = () => {
-  const [medDetails, setMedDetails] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [ordonnances, setOrdonnances] = useState<any[]>([]);
+  const [ordonnances, setOrdonnances] = useState([]);
 
   const fetchUserDetails = async () => {
     const token = localStorage.getItem("token");
@@ -24,13 +25,12 @@ const Ordonnance: React.FC = () => {
     }
 
     try {
-      const { data } = await axios.get(
+      await axios.get(
         `http://localhost:5000/personnels/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setMedDetails(data.nom);
     } catch (error) {
       console.error("Erreur lors de la récupération des détails :", error);
       setError("Impossible de récupérer les détails de l'utilisateur.");

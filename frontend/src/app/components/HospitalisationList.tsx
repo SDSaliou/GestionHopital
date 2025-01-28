@@ -27,18 +27,16 @@ interface Hospitalisation {
 }
 
 interface HospitalisationListProps {
-  hospitalisations: Hospitalisation[];
   fetchHospi: () => void;
 }
 
-const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisations, fetchHospi }) => {
+const HospitalisationList: React.FC<HospitalisationListProps> = ({fetchHospi }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentHospi, setCurrentHospi] = useState<Hospitalisation | null>(null);
   const [hospitalisation,setHospitalisation] = useState<Hospitalisation[]>([]);
   const [chambres, setChambres] = useState<Chambre[]>([]);
-  const [loading, setLoading] = useState(false);
   const [modifier, setModifier] = useState(false);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectType, setSelectType] = useState("nom");
@@ -48,7 +46,6 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const [hospiRes, chambresRes, patientRes] = await Promise.all([
           axios.get<Hospitalisation[]>("http://localhost:5000/hospitalisation"),
           axios.get("http://localhost:5000/chambre"),
@@ -65,11 +62,8 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
       } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
         toast.error("Erreur lors de la récupération des données.");
-      } finally {
-        setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -171,16 +165,16 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
             className="px-4 py-2 border border-gray-300 rounded-md"
           >
             <option value="nom">Trier par nom</option>
-            <option value="dateEntree">Trier par date d'entrée</option>
+            <option value="dateEntree">Trier par date d&apos;entr&eacute;e</option>
           </select>
         </div>
 
         <ToastContainer />
         {modifier && currentHospi && (
           <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
-            <h3 className="text-lg font-semibold mb-4">Modifier l'hospitalisation</h3>
+            <h3 className="text-lg font-semibold mb-4">Modifier l&apos;hospitalisation</h3>
             <div className="mb-4">
-              <label className="block text-lg font-bold mb-2 text-cyan-700">Patient à Hospitaliser:</label>
+              <label className="block text-lg font-bold mb-2 text-cyan-700">Patient &agrave; Hospitaliser&nbsp;:</label>
               <select
                 name="patient"
                 value={currentHospi.patient?._id || ""}
@@ -197,7 +191,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               >
-                <option value="">Sélectionnez un patient</option>
+                <option value="">Selectionnez un patient</option>
                 {patients.map((p) => (
                   <option key={p._id} value={p._id}>
                     {p.nom}
@@ -206,13 +200,13 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-lg font-bold text-cyan-700">Type De Chambre: </label>
+              <label className="block text-lg font-bold text-cyan-700">Type De Chambre &nbsp;: </label>
               <select
                 value={selectType || currentHospi?.chambre?.type || ""}
                 onChange={handleTypeChange}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md"
               >
-                <option value="">Sélectionnez le type de Chambre</option>
+                <option value="">Selectionnez le type de Chambre&nbsp;:</option>
                 {["Cabinet", "Normal"].map((type) => (
                   <option key={type} value={type}>
                     {type}
@@ -223,7 +217,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
 
             {/* Numéro de Chambre */}
             <div className="mb-4">
-              <label className="block text-lg font-bold text-cyan-700">Numéro De Chambre: </label>
+              <label className="block text-lg font-bold text-cyan-700">Numero De Chambre&nbsp;: </label>
               <select
                 name="chambre"
                 value={currentHospi?.chambre?._id || ""}
@@ -240,9 +234,9 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               >
-                <option value="">Sélectionnez une Chambre</option>
+                <option value="">Selectionnez une Chambre&nbsp;: </option>
                 {chambres
-                  .filter((chambre) => chambre.type === selectType || chambre.type === currentHospi?.chambre?.type) // Applique le filtre correctement
+                  .filter((chambre) => chambre.type === selectType || chambre.type === currentHospi?.chambre?.type) 
                   .map((chambre) => (
                     <option key={chambre._id} value={chambre._id}>
                       {chambre.numero} - {chambre.type}
@@ -251,7 +245,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-lg font-bold mb-2 text-cyan-700">Date d'entrée</label>
+              <label className="block text-lg font-bold mb-2 text-cyan-700">Date d&apos;entr&eacute;e</label>
               <input
                 type="date"
                 value={formatDate(currentHospi.dateEntree)}
@@ -317,7 +311,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
                   <th className="py-3 px-4 text-left">Numéro</th>
                   <th className="py-3 px-4 text-left">Type</th>
                   <th className="py-3 px-4 text-left">Notes</th>
-                  <th className="py-3 px-4 text-left">Date d'entrée</th>
+                  <th className="py-3 px-4 text-left">Date d&apos;entr&eacute;e</th>
                   <th className="py-3 px-4 text-left">Date de sortie</th>
                   <th className="py-3 px-4 text-center">Actions</th>
                 </tr>

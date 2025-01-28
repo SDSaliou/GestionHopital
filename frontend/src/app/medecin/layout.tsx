@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
-import axios from "axios";
+import axios , { AxiosError } from "axios";
 import Link from "next/link";
 import withRoleProtection from "../components/protectionPage";
 
@@ -22,8 +22,9 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMedDetails(data.nom);
-    } catch (err: any) {
-      setError(err.message || "Erreur lors de la récupération des détails du médecin.");
+    } catch (err) {
+      const errorResponse = err as AxiosError;
+      setError((errorResponse.response?.data as { message: string })?.message || "Erreur lors de la récupération des détails du médecin.");
     } finally {
       setLoading(false);
     }

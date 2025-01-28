@@ -10,16 +10,15 @@ import axios from "axios";
 
 const HospiPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [hospitalisation, setHospitalisation] = useState([]);
 
   const fetchHospi = async () => {
     try {
       const response = await axios.get("http://localhost:5000/hospitalisation/");
-      setHospitalisation(response.data);
       console.log("Hospi récupérés :", response.data);
       } catch (error) {
         console.error('Erreur en récupérant les hospitalisations', error);
         toast.error('Erreur lors de la récupérant');
+      setLoading(false);
       }
   }
 
@@ -32,7 +31,7 @@ const HospiPage: React.FC = () => {
       {loading ? (
         <p>Chargement...</p>
       ) : (
-        <HospitalisationList hospitalisations={hospitalisation} fetchHospi={fetchHospi} />
+        <HospitalisationList  fetchHospi={fetchHospi} />
       )}
 
 

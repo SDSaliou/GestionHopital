@@ -8,18 +8,15 @@ import "react-toastify/dist/ReactToastify.css";
 import withRoleProtection from "@/app/components/protectionPage";
 
 const Hospi: React.FC = () => {
-  const [hospi, setHospi] = useState<any[]>([]);
+  
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>("");
-
+ 
   const fetchHospi = async () => {
     setLoading(true);
-    setError("");
+    toast.error("");
     try {
-      const { data } = await axios.get("http://localhost:5000/Chambre/");
-      setHospi(data);
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Impossible de récupérer les données. Réessayez plus tard.");
+      await axios.get("http://localhost:5000/Chambre/");
+    } catch  {
       toast.error("Erreur lors de la récupération des données.");
     } finally {
       setLoading(false);
@@ -32,8 +29,12 @@ const Hospi: React.FC = () => {
 
   return (
     <div className="mx-auto py-24 px-8">
+      {loading ? (
+      <p>Chargement...</p>
+  ) : (
       <HospiForm fetchHospi={fetchHospi} />
-      <ToastContainer />
+    )}
+     <ToastContainer />
     </div>
   );
 };

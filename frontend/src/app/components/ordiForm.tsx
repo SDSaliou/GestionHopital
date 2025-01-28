@@ -14,6 +14,11 @@ interface Patient {
   codePatient: string;
 }
 
+interface Personnel {
+  _id: string;
+  nom: string;
+}
+
 interface OrdonnanceFormProps {
   fetchOrdonnances: () => void;
 }
@@ -32,7 +37,7 @@ const OrdonnanceForm: React.FC<OrdonnanceFormProps> = ({ fetchOrdonnances }) => 
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [patients, setPatients] = useState<Patient []>([]);
-  const [personnels, setPersonnels] = useState<any[]>([]);
+  const [personnels, setPersonnels] = useState<Personnel []>([]);
 
   
   
@@ -47,7 +52,7 @@ const OrdonnanceForm: React.FC<OrdonnanceFormProps> = ({ fetchOrdonnances }) => 
         .sort((a, b) => a.nom.localeCompare(b.nom));
         setPatients(sortedPatients);
         setPersonnels(personnelsRes.data);
-      } catch (err) {
+      } catch  {
         setError('Erreur lors du chargement des données');
       }
     };

@@ -7,27 +7,31 @@ import withRoleProtection from '@/app/components/protectionPage';
 
 const DossiersPage: React.FC = () => {
     const [dossierPatient, setDossierPatient] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const fetchDoPatient = async () => {
-        setLoading(true);
         try {
             const response = await axios.get('http://localhost:5000/dossier');
             setDossierPatient(response.data); 
-            setLoading(false);
+            
         } catch (error) {
             console.error('Erreur lors de la récupération des dossiers', error);
+        }finally {
             setLoading(false);
-        }
+          }
     };
 
     useEffect(() => {
         fetchDoPatient();
     }, []);
 
-    return (
-        <DossierList dossierPatient={dossierPatient} fetchDoPatient={fetchDoPatient} />
-        
+    return (<div className="flex flex-col items-center justify-center">
+        {loading ? (
+          <p>Chargement...</p>
+        ) : (
+               <DossierList dossierPatient={dossierPatient} fetchDoPatient={fetchDoPatient} />
+        )}
+        </div>
     );
 };
 

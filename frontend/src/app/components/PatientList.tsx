@@ -25,8 +25,6 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentPatient, setCurrentPatient] = useState<Patient | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const patientsPerPage = 5;
 
@@ -34,16 +32,14 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+       
         const response = await axios.get<Patient[]>("http://localhost:5000/patients");
         const sortedPatients = response.data.sort((a, b) => a.nom.localeCompare(b.nom)); // Tri par nom
         setPatients(sortedPatients);
       } catch (err) {
         console.error("Erreur lors de la récupération des patients :", err);
         toast.error("Erreur lors de la récupération des patients.");
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     fetchData();
@@ -128,7 +124,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
         {/* Formulaire de mise à jour */}
         {isEditing && currentPatient && (
           <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
-            <h3 className="text-lg font-semibold mb-4">Mettre à jour le patient</h3>
+            <h3 className="text-lg font-semibold mb-4">Mettre &agrave; jour le patient</h3>
             {/* Champs du formulaire */}
             {[
               { label: "Nom", value: currentPatient.nom, key: "nom" },
@@ -167,7 +163,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
               </div>
             ))}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Date d'Entrée</label>
+              <label className="block text-sm font-medium text-gray-700">Date d&apos;Entr&eacute;e</label>
               <input
                 type="date"
                 value={
@@ -208,10 +204,10 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
               <tr>
                 <th className="py-3 px-4 text-left">Nom</th>
                 <th className="py-3 px-4 text-left">Code Patient</th>
-                <th className="py-3 px-4 text-left">Numéro Téléphone</th>
+                <th className="py-3 px-4 text-left">Numero Telephone</th>
                 <th className="py-3 px-4 text-left">Dossier Medical </th>
-                <th className="py-3 px-4 text-left">Numéro Assurance</th>
-                <th className="py-3 px-4 text-left">Date d'Entrée</th>
+                <th className="py-3 px-4 text-left">Numero Assurance</th>
+                <th className="py-3 px-4 text-left">Date d&apos;Entr&eacute;e</th>
                 <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
@@ -259,7 +255,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
             disabled={currentPage === 1}
             className="px-2 sm:px-4 py-2 text-xs sm:text-sm rounded-md bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50"
           >
-            Précédent
+            Precedent
           </button>
 
           <div className="flex justify-center items-center space-x-1">

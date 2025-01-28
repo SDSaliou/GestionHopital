@@ -7,8 +7,6 @@ import Link from "next/link";
 import {toast} from 'react-toastify';
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [personnels, setPersonnels] = useState([]);
-    const [patients, setPatients] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [adminDetails, setAdminDetails] = useState<string | null>(null);
@@ -49,28 +47,6 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         // Appel de la fonction fetchUserDetails pour récupérer les détails de l'utilisateur
         fetchUserDetails();
     },[]);
-
-        // Récupération des données des patients et du personnel
-        const fetchData = async () => {
-            try {
-                const [patientsRes, personnelsRes] = await Promise.all([
-                    axios.get("http://localhost:5000/patients/"),
-                    axios.get("http://localhost:5000/personnels/"),
-                ]);
-                setPatients(patientsRes.data);
-                setPersonnels(personnelsRes.data);
-            } catch (error) {
-                console.error("Erreur lors de la récupération des données :", error);
-                setError("Erreur lors de la récupération des données.");
-            } finally {
-                setLoading(false);
-            }
-        };
-    useEffect(() => {
-        if(adminDetails){
-            fetchData();
-        }
-    },[adminDetails]);
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("userId");

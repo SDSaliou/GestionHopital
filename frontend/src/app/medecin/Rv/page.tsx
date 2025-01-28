@@ -32,7 +32,6 @@ interface Dossier {
 
 const Medecin: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [medDetails, setMedDetails] = useState<string | null>(null);
   const [Rv, setRv] = useState<RV[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -41,12 +40,6 @@ const Medecin: React.FC = () => {
   const [dossierOpen, setDossierOpen] = useState(false);
 
 
-  //la déconnexion
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    window.location.href = "/login";
-  };
 
   // Récupérer les détails du médecin connecté
   const fetchMedDetails = async () => {
@@ -54,7 +47,7 @@ const Medecin: React.FC = () => {
     const userId = localStorage.getItem("userId");
 
     if (!token || !userId) {
-      setError("Utilisateur non authentifié.");
+      toast.error("Utilisateur non authentifié.");
       setLoading(false);
       return;
     }
@@ -65,8 +58,8 @@ const Medecin: React.FC = () => {
  });
       setRv(data);
       setMedDetails(data.nom);
-    } catch (err) {
-      setError("Erreur lors de la récupération des détails du médecin.");
+    } catch {
+      toast.error("Erreur lors de la récupération des détails du médecin.");
     }
   };
 
@@ -76,7 +69,7 @@ const Medecin: React.FC = () => {
     const userId = localStorage.getItem("userId");
 
     if (!token || !userId) {
-      setError("Utilisateur non authentifié.");
+      toast.error("Utilisateur non authentifié.");
       setLoading(false);
       return;
     }
@@ -86,8 +79,8 @@ const Medecin: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setRv(data);
-    } catch (err) {
-      setError("Erreur lors de la récupération des rendez-vous.");
+    } catch {
+      toast.error("Erreur lors de la récupération des rendez-vous.");
     }
   };
 
@@ -95,7 +88,7 @@ const Medecin: React.FC = () => {
   const handleVoirDossier = async (patientId: string) => {
     if (!patientId) {
       console.error("ID patient manquant");
-      setError("Impossible de récupérer le dossier, ID patient manquant.");
+      toast.error("Impossible de récupérer le dossier, ID patient manquant.");
       return;
     }
     try {
@@ -113,7 +106,13 @@ const Medecin: React.FC = () => {
 };
 
   // Gestion du clic sur la date
-  const handleDateClick = (date: Date | Date[] | {} |null) => {
+  const handleDateClick = (date: Date | Date[]  |null) => {
+    if (!date) {
+      setDetails([]);
+      setSelectedDate(null);
+      return;
+    }
+
     if (date instanceof Date) {
       setSelectedDate(date);
       const formatDate = date.toISOString().split("T")[0];
@@ -162,8 +161,8 @@ const Medecin: React.FC = () => {
       <div className="text-center">
          <h2 className="text-2xl font-bold text-black-800 ">Mes Rendez-vous</h2>
          <div className="mb-6 mt-4 flex flex-col items-center bg-gray-50 p-6 rounded-lg shadow-md">
-          <Calendar
-            onChange={handleDateClick}
+         <Calendar
+            onClickDay={handleDateClick}
             value={selectedDate}
             tileContent={({ date }) => {
               const formattedDate = date.toISOString().split("T")[0];
@@ -184,7 +183,7 @@ const Medecin: React.FC = () => {
               );
               return hasRv ? "text-cyan-600 font-bold" : "";
             }}
-            tileDisabled={({ date }) => date < new Date()} // Désactiver les dates passées
+            tileDisabled={({ date }) => date < new Date()}
             next2Label={null} 
             prev2Label={null} 
             />

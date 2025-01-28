@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import PatientList from "../../components/PatientList";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,8 +24,9 @@ const PatientListe: React.FC = () => {
             headers: { Authorization: `Bearer ${token}` },
           });
           setRecDetails(data.nom);
-        } catch (err: any) {
-          setError(err.message || "Erreur lors de la récupération des détails du médecin.");
+        } catch (err) {
+        const errorResponse = err as AxiosError;
+        setError((errorResponse.response?.data as { message: string })?.message ||  "Erreur lors de la récupération des détails du médecin.");
         } finally {
           setLoading(false);
         }
@@ -39,7 +40,7 @@ const PatientListe: React.FC = () => {
   const fetchPatients = async () => {
     try {
       const response = await axios.get("http://localhost:5000/patients/");
-      setPatients(response.data); // Mise à jour des patients dans l'état
+      setPatients(response.data); 
       console.log("Patients récupérés :", response.data);
     } catch (error) {
       console.error("Erreur en récupérant les patients :", error);

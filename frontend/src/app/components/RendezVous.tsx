@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -57,16 +57,14 @@ const RV: React.FC<RVProps> = ({ fetchRV }) => {
       const medOr = data
       .sort((a,b) => a.nom.localeCompare(b.nom));
       setMedecins(medOr);
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        toast.error("Vous devez être connecté pour accéder à cette ressource.");
-      } else {
-        console.error("Erreur lors de la récupération des médecins :", error);
-        toast.error("Erreur lors de la récupération des médecins.");
-      }
+    } catch (error) {
+      const errorResponse = error as AxiosError;
+      toast.error((errorResponse.response?.data as { message: string })?.message || 'Erreur lors de l\'ajout');
+    } finally {
+      setLoading(false);
+    
     }
   };
-
   useEffect(() => {
     fetchPatients();
     fetchMedecins();

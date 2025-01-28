@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const HomePage: React.FC = () => {
   return (
@@ -17,9 +18,10 @@ const HomePage: React.FC = () => {
         <div className="relative flex h-16 space-x-10 w-full">
           <div className="flex justify-start">
             <Link className="flex flex-shrink-0 items-center" href="/">
-              <img
+              <Image
                 className="block h-8 w-auto rounded-full object-cover"
-                height="32"
+                height={32}
+                width={32}
                 src="/Logo.PNG"
                 alt="Logo"
               />

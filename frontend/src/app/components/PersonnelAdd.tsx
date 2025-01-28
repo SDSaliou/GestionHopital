@@ -51,8 +51,6 @@ const Personnel: React.FC<PersonnelProps> = ({ fetchPersonnel }) => {
   
 
   const handleSubmit = async (e: React.FormEvent) => {
-    const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("userId");
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -131,7 +129,7 @@ const Personnel: React.FC<PersonnelProps> = ({ fetchPersonnel }) => {
             required
           >
             <option value="" disabled>
-              Sélectionnez un service
+              Selectionnez un service
             </option>
             <option value="Admin">Admin</option>
             <option value="Receptionniste">Réceptionniste</option>
@@ -166,7 +164,7 @@ const Personnel: React.FC<PersonnelProps> = ({ fetchPersonnel }) => {
                   type="checkbox"
                   value={jour}
                   checked={personnels.jourService.includes(jour)}
-                  onChange={(e) =>
+                  onChange={() =>
                     handleChange(
                       "jourService",
                       personnels.jourService.includes(jour)
@@ -184,7 +182,7 @@ const Personnel: React.FC<PersonnelProps> = ({ fetchPersonnel }) => {
 
         {/* Contact */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Téléphone</label>
+          <label className="block text-sm font-medium text-gray-700">Telephone</label>
           <input
             className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             value={personnels.contact}
@@ -197,7 +195,7 @@ const Personnel: React.FC<PersonnelProps> = ({ fetchPersonnel }) => {
 
         {/* Catégories */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Catégories</label>
+          <label className="block text-sm font-medium text-gray-700">Categories</label>
           <select
             value={personnels.catégories}
             onChange={(e) => handleChange("catégories", e.target.value)}

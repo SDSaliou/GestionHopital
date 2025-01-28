@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,6 +27,7 @@ const RVList: React.FC = () => {
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("nom");
 
@@ -50,13 +51,11 @@ const RVList: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMedecins(data);
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        toast.error("Vous devez être connecté pour accéder à cette ressource.");
-      } else {
-        console.error("Erreur lors de la récupération des médecins :", error);
-        toast.error("Erreur lors de la récupération des médecins.");
-      }
+    } catch (error) {
+      const errorResponse = error as AxiosError;
+        toast.error((errorResponse.response?.data as { message: string })?.message || 'Erreur lors de l\'ajout');
+        } finally {
+        
     }
   };
 
@@ -68,24 +67,19 @@ const RVList: React.FC = () => {
   useEffect(() => {
     setCurrentPage(1); 
   }, [searchTerm]);
-
-  const debounce = (func: Function, delay: number) => {
-    let timer: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const handleSearchChange = debounce((value: string) => {
-    setSearchTerm(value);
-  }, 300);
+  
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   const filteredRV = rendezVous
     .filter((rv) =>
       [rv.patient?.nom]
         .filter(Boolean)
-        .some((value) => value?.toLowerCase().includes(searchTerm.toLowerCase()))
+        .some((value) => value?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
     )
     .sort((a, b) => {
       if (sortBy === "nom") {
@@ -180,7 +174,7 @@ const RVList: React.FC = () => {
         <input
           type="text"
           placeholder="Rechercher par nom de patient"
-          onChange={(e) => handleSearchChange(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select className="px-4 py-2 border border-gray-300 rounded-md" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>

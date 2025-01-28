@@ -37,9 +37,9 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
   useEffect(() => {
     const fetchOrdonnances = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/ordonnance/");
+        await axios.get("http://localhost:5000/ordonnance/");
         setLoading(false);
-      } catch (err) {
+      } catch {
         setError("Erreur lors du chargement des ordonnances.");
         setLoading(false);
       }
@@ -97,10 +97,10 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
     {/* Formulaire de mise à jour */}
     {modifier && selectedOrdonnance && (
         <div className="mt-6 border p-4 rounded shadow-md bg-gray-100">
-        <h3 className="text-lg font-semibold">Modifier l'Ordonnance</h3>
+        <h3 className="text-lg font-semibold">Modifier l&apos;Ordonnance</h3>
       
         {/* Médicaments */}
-        <h3 className="mt-4 text-lg font-semibold">Médicaments: </h3>
+        <h3 className="mt-4 text-lg font-semibold">Medicaments&nbsp;: </h3>
           <ul className="list-disc pl-6">
             {selectedOrdonnance.medicaments.map((med, idx) => (
               <li key={idx} className="flex items-center space-x-2">
@@ -158,7 +158,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
             Ajouter un medicament
           </button>
         {/* Tests Recommandés */}
-        <h3 className="mt-4 text-lg font-semibold">Tests Recommandés :</h3>
+        <h3 className="mt-4 text-lg font-semibold">Tests Recommandes&nbsp;:</h3>
         <ul className="list-disc pl-6">
           {selectedOrdonnance.testsRecommandes.map((test, idx) => (
             <li key={idx} className="flex items-center space-x-2">
@@ -188,7 +188,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
           onClick={() =>
             setSelectedOrdonnance({
               ...selectedOrdonnance,
-              testsRecommandes: [...selectedOrdonnance.testsRecommandes, ""], // Ajouter un test vide
+              testsRecommandes: [...selectedOrdonnance.testsRecommandes, ""], 
             })
           }
           className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
@@ -230,7 +230,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
 
       {!modifier && selectedOrdonnance && (
             <div className="mt-6 border p-4 rounded shadow-md bg-gray-100">
-              <h2 className="text-xl font-bold">Détails de l'Ordonnance</h2>
+              <h2 className="text-xl font-bold">Details de l&apos;Ordonnance</h2>
               <p>
                 <strong>Patient :</strong> {selectedOrdonnance.patient?.nom || "Inconnu"}
               </p>
@@ -243,7 +243,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
               <p>
                 <strong>Date :</strong> {new Date(selectedOrdonnance.datePrescription).toLocaleDateString()}
               </p>
-              <h3 className="mt-4 text-lg font-semibold">Médicaments :</h3>
+              <h3 className="mt-4 text-lg font-semibold">Medicaments &nbsp;:</h3>
               <ul className="list-disc pl-6">
                 {selectedOrdonnance.medicaments.map((med, idx) => (
                   <li key={idx}>
@@ -251,7 +251,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
                   </li>
                 ))}
               </ul>
-              <h3 className="mt-4 text-lg font-semibold">Tests Recommandés :</h3>
+              <h3 className="mt-4 text-lg font-semibold">Tests Recommandes&nbsp;:</h3>
               <ul className="list-disc pl-6">
                 {selectedOrdonnance.testsRecommandes.map((test, idx) => (
                   <li key={idx}>{test}</li>

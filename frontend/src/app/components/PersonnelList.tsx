@@ -26,8 +26,6 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
   const [currentPage, setCurrentPage] = useState(1);
   const [UPpersonnel, setUPpersonnel] = useState<Personnels | null>(null);
   const [isEditing, setIsEditing] = useState(false);
- const [message,setMessage]= useState("");
-  const [error, setError] = useState("");
   const personnelsPerPage = 5;
 
   // Mise à jour du terme de recherche avec un délai pour la fluidité
@@ -43,8 +41,8 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
     const loadPersonnels = async () => {
       try {
         await fetchPersonnels();
-      } catch (err) {
-        setError("Erreur lors du chargement des personnels.");
+      } catch {
+        toast.error("Erreur lors du chargement des personnels.");
       }
     };
     loadPersonnels();
@@ -75,14 +73,13 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
           `http://localhost:5000/personnels/${UPpersonnel._id}`,
           UPpersonnel
         );
-        setMessage("Personnel mis à jour avec succès !");
-        setError(""); 
+        toast.success("Personnel mis à jour avec succès !");
         setIsEditing(false);
         setUPpersonnel(null);
         fetchPersonnels();
       } catch (err) {
         console.error("Erreur lors de la mise à jour :", err);
-        setError("Erreur lors de la mise à jour. Veuillez réessayer.");
+        toast.error("Erreur lors de la mise à jour. Veuillez réessayer.");
       }
     }
   };
@@ -96,7 +93,7 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
         await axios.delete(`http://localhost:5000/personnels/delete/${id}`);
         toast.success('Personnel supprimé !!!')
         fetchPersonnels();
-      } catch (error) {
+      } catch {
         toast.error("Erreur lors de la suppression :");
         alert("Erreur lors de la suppression du personnel. Veuillez réessayer.");
       }
@@ -105,7 +102,7 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
   return (
     <div className="min-h-screen bg-[url('/Logo.PNG')] bg-cover flex  justify-center items-center">
       <div className="container mx-auto px-4">
-        <h1 className="text-2xl font-bold text-center mb-6">Liste des Personnels</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">Liste du Personnel</h1>
 
         {/* Barre de recherche */}
         <div className="mb-6 flex justify-center">
@@ -194,7 +191,7 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
                       type="checkbox"
                       value={jour}
                       checked={UPpersonnel.jourService.includes(jour)}
-                      onChange={(e) => {
+                      onChange={() => {
                         const selectedDays = UPpersonnel.jourService.includes(jour)
                           ? UPpersonnel.jourService.filter((d) => d !== jour)
                           : [...UPpersonnel.jourService, jour];
@@ -292,7 +289,7 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
     disabled={currentPage === 1}
     className="px-3 py-2 text-sm rounded-md bg-cyan-600 text-white hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed"
   >
-    Précédent
+    Precedent
   </button>
 
   {/* Numéros de page */}

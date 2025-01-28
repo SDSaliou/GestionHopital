@@ -2,6 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
+
 
 // Définir les types pour les props
 interface NavLink {
@@ -20,7 +22,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarTitle, buttonLinks, children }) 
       <div className="flex min-h-screen bg-cyan-500">
             {/* Sidebar */}
         <aside className="w-64 bg-cyan-500 p-4 flex flex-col gap-6 fixed top-0 left-0 h-screen">
-            <div className="text-center text-white font-bold text-lg">Liste des tâches</div>
+            <div className="text-center text-white font-bold text-lg">Liste des taches</div>
             <nav className="flex flex-col gap-4">
             {sidebarTitle.map((link, index) =>(
              <Link
@@ -40,9 +42,10 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarTitle, buttonLinks, children }) 
                 <h1 className="text-lg font-bold">{/* Logo */}
             
                   <Link href="/" aria-label="Home">
-                    <img
+                    <Image
                       src="/Logo.PNG"
-                      height="32"
+                      height={32}
+                      width={32}
                       alt="Logo"
                       className="block h-8 w-auto rounded-full object-cover"
                     />

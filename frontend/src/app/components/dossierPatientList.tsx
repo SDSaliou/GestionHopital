@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+
 
 interface Diagnostics {
     note: string;
@@ -26,12 +27,12 @@ interface DossierListProps {
     fetchDoPatient: () => void;
 }
 
-const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient}) => {
+const DossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient}) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedDossier, setSelectedDossier] = useState<Dossier | null>(null);
   const [modifier, setModifier] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -40,7 +41,7 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
   useEffect(() => {
     const fetchDossPatient = async () => {
         try {
-          const res = await axios.get('http://localhost:5000/dossier/');
+           await axios.get('http://localhost:5000/dossier/');
           fetchDoPatient();
           setLoading(false);
         } catch (error) {
@@ -64,11 +65,16 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
             setModifier(false);
             setSelectedDossier(updatedDossier);
             fetchDoPatient();
-        } catch (error: any) {
-            console.error("Erreur lors de l'ajout ou de la mise à jour du dossier:", error.response?.data || error.message);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
             toast.error(`Erreur : ${error.response?.data?.message || "Erreur inconnue"}`);
+          } else if (error instanceof Error) {
+            toast.error(`Erreur : ${error.message}`);
+          } else {
+            toast.error("Erreur inconnue");
+          }
         }
-    }
+      }
   };
   //suppression
   const handleDelete = async (id: string) => {
@@ -79,28 +85,23 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
       await axios.delete(`http://localhost:5000/dossier/delete/${id}`);
       toast.success('Dossier supprimé avec succès!');
       fetchDoPatient();
-    } catch (error) {
+    } catch {
       toast.error('Erreur lors de la suppression du dossier');
     }
   };
-  const debounce = (func: Function, delay: number) => {
-    let timer: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const handleSearchChange = debounce((value: string) => {
-    setSearchTerm(value);
-  }, 300);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   // Filtrer les patients en fonction du terme de recherche
   const filteredDossier = (Array.isArray(dossierPatient)? dossierPatient: []).filter(
     (doss) =>
-      doss.patient?.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doss.patient?.dossierMedical.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doss.numeroDossier?.toString().includes(searchTerm.toLowerCase())
+      doss.patient?.nom.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      doss.patient?.dossierMedical.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      doss.numeroDossier?.toString().includes(debouncedSearchTerm.toLowerCase())
   );
 
   // Pagination
@@ -112,13 +113,16 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
     indexOfLastDossier
   );
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="min-h-screen bg-[url('/Logo.PNG')] bg-cover flex justify-center items-center">
+      <div className="container mx-auto px-4">
+      <ToastContainer />
+
     <h1 className="text-2xl font-bold mb-4">Liste des Dossiers</h1>
     {/* Champs de recherche */}
     <input
         type="text"
         placeholder="Rechercher un dossier..."
-        onChange={(e) => handleSearchChange(e.target.value)}
+        onChange={(e) => setSearchTerm(e.target.value)}
         className="mb-4 px-4 py-2 border border-gray-300 rounded-md shadow-sm w-full"
       />
   {/*Affichage des dossiers*/}
@@ -180,7 +184,7 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
       <h3 className="text-lg font-semibold">Modifier ce dossier</h3>
     
       {/* diagnostic */}
-      <h3 className="mt-4 text-lg font-semibold">Diagnostic: </h3>
+      <h3 className="mt-4 text-lg font-semibold">Diagnostic &nbsp;: </h3>
         <ul className="list-disc pl-6">
           {selectedDossier.diagnostic.map((diag, idx) => (
             <li key={idx} className="flex items-center space-x-2">
@@ -235,14 +239,14 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
               />
               <input
-                type="date"
-                value={diag.DateDiagnostic ? new Date(diag.DateDiagnostic).toISOString().slice(0, 10) : ''}
-                onChange={(e) => {
-                  const updatedDiag = [...selectedDossier.diagnostic];
-                  updatedDiag[idx].DateDiagnostic = e.target.value;
-                  setSelectedDossier({ ...selectedDossier, diagnostic: updatedDiag });
-                }}
-              />
+  type="date"
+  value={diag.DateDiagnostic ? new Date(diag.DateDiagnostic).toISOString().slice(0, 10) : ''}
+  onChange={(e) => {
+    const updatedDiag = [...selectedDossier.diagnostic];
+    updatedDiag[idx].DateDiagnostic = e.target.value;
+    setSelectedDossier({ ...selectedDossier, diagnostic: updatedDiag });
+  }}
+/>
 
               <button
                 onClick={() => {
@@ -331,16 +335,11 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
           </button>
            ))}
           </div>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="px-2 sm:px-4 py-2 text-xs sm:text-sm rounded-md bg-cyan-400 hover:bg-cyan-500 disabled:opacity-50"
-          >
-          Suivant
-          </button>
       </div>
     </div>
+    </div>
+
   );
 };
 
-export default dossierList;
+export default DossierList;

@@ -98,7 +98,7 @@ const Patient: React.FC<PatientProps> = ({ fetchPatients }) => {
             </div>
       
             <div className="mb-4">
-              <label className="block text-sm font-medium text-black-700">Numéro Assurance</label>
+              <label className="block text-sm font-medium text-black-700">Numero Assurance</label>
               <input
                 type="text"
                 name="numAssuranceMaladie"
@@ -109,7 +109,7 @@ const Patient: React.FC<PatientProps> = ({ fetchPatients }) => {
             </div>
       
             <div className="mb-4">
-              <label className="block text-sm font-medium text-black-700">Numéro Téléphone</label>
+              <label className="block text-sm font-medium text-black-700">Numero Telephone</label>
               <input
                 type="text"
                 name="numTelephone"
@@ -120,7 +120,7 @@ const Patient: React.FC<PatientProps> = ({ fetchPatients }) => {
               />
             </div>     
             <div className="mb-4">
-              <label className="block text-sm font-medium text-black-700">Date d'Entrée</label>
+              <label className="block text-sm font-medium text-black-700">Date d&apos;Entr&eacute;e</label>
               <input
                 type="date"
                 name="dateEntree"

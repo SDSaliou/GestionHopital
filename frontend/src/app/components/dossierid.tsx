@@ -43,11 +43,11 @@ const DossierPourID: React.FC= () => {
   });
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [modifier,setModifier] = useState(false);
   const [dossi, setDossi] = useState<Dossier []>([])
   const [dossier, setDossier] = useState<Dossier | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [currentPage, setCurrentPage] = useState(1);
   const DosPerPage = 5;
 
@@ -84,11 +84,16 @@ const DossierPourID: React.FC= () => {
           prev.map((dossier) => (dossier._id === updatedDossier._id ? updatedDossier : dossier))
         );
         setModifier(false);
-        } catch (error: any) {
-            console.error("Erreur lors de l'ajout ou de la mise à jour du dossier:", error.response?.data || error.message);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
             toast.error(`Erreur : ${error.response?.data?.message || "Erreur inconnue"}`);
+          } else if (error instanceof Error) {
+            toast.error(`Erreur : ${error.message}`);
+          } else {
+            toast.error("Erreur inconnue");
+          }
         }
-    }
+      };
   
   const handleEditDossier = (dossier: Dossier) => {
     setDossier(dossier);
@@ -116,30 +121,26 @@ const DossierPourID: React.FC= () => {
       toast.success("Dossier créé avec succès !");
       setDossi((prev) => [...prev, { ...newDossier }]);
       setShowCreateForm(false)
-    } catch (err) {
+    } catch {
       toast.error("Erreur lors de l'ajout du dossier.");
     } finally{
       setLoading(false)
     }
   };
-  const debounce = (func: Function, delay: number) => {
-    let timer: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const handleSearchChange = debounce((value: string) => {
-    setSearchTerm(value);
-  }, 300);
+ 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   const filteredPatD = Array.isArray(patientD)
   ?patientD
   .filter(
     (p) =>
-      p.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (p.codePatient.toLowerCase().includes(searchTerm.toLowerCase()))
+      p.nom.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      (p.codePatient.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
   )
   .sort((a,b) =>a.nom.localeCompare(b.nom))
   : [];
@@ -159,13 +160,12 @@ const DossierPourID: React.FC= () => {
         <input
           type="text"
           placeholder="Rechercher par nom de patient ou code patient"
-          onChange={(e) => handleSearchChange(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
       </div>
       <ToastContainer /> 
           {loading && <p>Chargement...</p>}
-          {error && <p className="text-red-500">{error}</p>}
 
     {/* Creation du Dossier */}
     {showCreateForm && (

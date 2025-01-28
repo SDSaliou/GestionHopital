@@ -9,15 +9,14 @@ import withRoleProtection from "@/app/components/protectionPage";
 const PatientListe: React.FC = () => {
   const [medDetails, setMedDetails] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [patients, setPatients] = useState<any[]>([]); 
+  
 
   const fetchUserDetails = async () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
 
     if (!token || !userId) {
-      setError("Utilisateur non authentifié. Veuillez vous connecter.");
+      toast.error("Utilisateur non authentifié. Veuillez vous connecter.");
       setLoading(false);
       return;
     }
@@ -32,7 +31,6 @@ const PatientListe: React.FC = () => {
       setMedDetails(data.nom);
     } catch (error) {
       console.error("Erreur lors de la récupération des détails :", error);
-      setError("Impossible de récupérer les détails de l'utilisateur.");
       toast.error("Erreur lors de la récupération des données.");
     } finally {
       setLoading(false);
@@ -47,7 +45,6 @@ const PatientListe: React.FC = () => {
   const fetchPatients = async () => {
     try {
       const response = await axios.get("http://localhost:5000/patients/");
-      setPatients(response.data); // Mise à jour des patients dans l'état
       console.log("Patients récupérés :", response.data);
     } catch (error) {
       console.error("Erreur en récupérant les patients :", error);
@@ -62,22 +59,18 @@ const PatientListe: React.FC = () => {
       }
     }, [medDetails]);
 
-  // if (loading) {
-  //   return <div>Chargement...</div>;
-  // }
 
   return (
     <div >
        {loading && <p>Chargement des données...</p>}
-        {error && <p className="text-red-500">{error}</p>}
 
         {/* Affichage des patients lorsque les données sont chargées */}
-        {!loading && !error && patients.length > 0 && (
+        {!loading  && (
           <DossierPourID />
         )}
 
         {/* Affichage si aucun patient n'est trouvé */}
-        {!loading && !error && patients.length === 0 && (
+        {!loading  && (
           <p>Aucun patient trouvé.</p>
         )}
         
