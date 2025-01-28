@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Patient from '@/app/components/PatientForm'
-import { toast, ToastContainer } from "react-toastify";
+import {ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import withRoleProtection from '@/app/components/protectionPage';
 

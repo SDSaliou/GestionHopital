@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const Patients = require("./patients");
-const Personnels =require("./personnels");
 
 
 const ordonnanceSchema = new mongoose.Schema({

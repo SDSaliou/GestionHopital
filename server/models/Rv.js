@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const Patients = require("./patients");
-const Personnels =require("./personnels");
+
 
 const rendezVousSchema = new mongoose.Schema({
     patient: { type: mongoose.Schema.Types.ObjectId, ref: 'Patients', required: true },

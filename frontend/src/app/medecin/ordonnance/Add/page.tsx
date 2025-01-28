@@ -62,12 +62,9 @@ const OrdonnanceAdd: React.FC = () => {
   useEffect(() => {
     fetchUserDetails();
     fetchOrdonnances();
-  }, []); // Only fetch once when the component mounts
+  }, []); 
 
-  // if (loading) {
-  //   return <div>Chargement...</div>;
-  // }
-
+  
   return (
     <div className="flex justify-center items-center">
    

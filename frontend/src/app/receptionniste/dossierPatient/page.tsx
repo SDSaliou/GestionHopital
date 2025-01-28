@@ -26,7 +26,7 @@ const DossiersPage: React.FC = () => {
     }, []);
 
     return (
-               <DossierList dossierPatient={dossierPatient} fetchDoPatient={fetchDoPatient} />
+        <DossierList dossierPatient={dossierPatient} fetchDoPatient={fetchDoPatient} />
         
     );
 };

@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PatientList from "../../components/PatientList";
-import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import withRoleProtection from "@/app/components/protectionPage";
@@ -62,7 +61,7 @@ const PatientListe: React.FC = () => {
 
         {/* Affichage des patients lorsque les données sont chargées */}
         {!loading && !error && patients.length > 0 && (
-          <PatientList patients={patients} fetchPatients={fetchPatients} />
+          <PatientList  fetchPatients={fetchPatients} />
         )}
 
         {/* Affichage si aucun patient n'est trouvé */}

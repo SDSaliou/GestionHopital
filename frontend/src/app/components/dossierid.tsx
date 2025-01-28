@@ -28,9 +28,7 @@ interface Dossier {
   diagnostic: Diagnostics[];
   numeroDossier?: string;
 }
-// interface DosPatientProps {
-//   fetchdosList:()=>void;
-// }
+
 
 const DossierPourID: React.FC= () => {
   const [patientD, setPatientD] = useState<Patient []>([]);
@@ -59,10 +57,11 @@ const DossierPourID: React.FC= () => {
       try {
         setLoading(true);
         const [patientsRes, dossiersRes] = await Promise.all([
-          axios.get("http://localhost:5000/patients"),
+          axios.get<Patient[]>("http://localhost:5000/patients"),
           axios.get("http://localhost:5000/dossier"),
         ]);
-        setPatientD(patientsRes.data);
+        const sortedPatients = patientsRes.data.sort((a, b) => a.nom.localeCompare(b.nom));
+        setPatientD(sortedPatients);
         setDossi(dossiersRes.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des données :", error);
@@ -135,11 +134,15 @@ const DossierPourID: React.FC= () => {
     setSearchTerm(value);
   }, 300);
 
-  const filteredPatD = patientD.filter(
+  const filteredPatD = Array.isArray(patientD)
+  ?patientD
+  .filter(
     (p) =>
       p.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (p.codePatient.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  )
+  .sort((a,b) =>a.nom.localeCompare(b.nom))
+  : [];
 
   
   const totalPages = Math.ceil(filteredPatD.length / DosPerPage);

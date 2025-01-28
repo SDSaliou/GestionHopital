@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,10 +37,12 @@ const HospiForm: React.FC<HospiFormProps> = ({fetchHospi}) =>{
         const fetchData = async () => {
           try {
             const [patientsRes, chambreRes] = await Promise.all([
-              axios.get('http://localhost:5000/patients'),
+              axios.get<Patient[]>('http://localhost:5000/patients'),
               axios.get('http://localhost:5000/chambre/'),
             ]);
-            setPatient(patientsRes.data);
+            const sortedPatients = patientsRes.data
+            .sort((a, b) => a.nom.localeCompare(b.nom));
+           setPatient(sortedPatients);
             setChambres(chambreRes.data);
           } catch (err) {
             setError('Erreur lors du chargement des données');

@@ -28,12 +28,15 @@ const RVList: React.FC = () => {
   const [loadingDelete, setLoadingDelete] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("nom");
+
   const rvPerPage = 3;
 
   const fetchRendezVous = async () => {
     try {
       const { data } = await axios.get<RendezVous[]>("http://localhost:5000/rendezvous/");
-      setRendezVous(data);
+      const sortedRv = data.sort((a, b) => (a.patient?.nom || "").localeCompare(b.patient?.nom || ""));
+      setRendezVous(sortedRv);
     } catch (error) {
       console.error("Erreur lors de la récupération des rendez-vous :", error);
       toast.error("Erreur lors de la récupération des rendez-vous.");
@@ -78,11 +81,21 @@ const RVList: React.FC = () => {
     setSearchTerm(value);
   }, 300);
 
-  const filteredRV = rendezVous.filter(
-    (rv) =>
-      rv.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (rv.patient?.nom && rv.patient.nom.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredRV = rendezVous
+    .filter((rv) =>
+      [rv.patient?.nom]
+        .filter(Boolean)
+        .some((value) => value?.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+    .sort((a, b) => {
+      if (sortBy === "nom") {
+        return (a.patient?.nom || "").localeCompare(b.patient?.nom || "");
+      }
+      if (sortBy === "date") {
+        return new Date(a.date).getTime() - new Date(b.date).getTime(); 
+      }
+      return 0;
+    });
 
   
   const totalPages = Math.ceil(filteredRV.length / rvPerPage);
@@ -163,14 +176,17 @@ const RVList: React.FC = () => {
   return (
     <div className="min-h-screen bg-[url('/Logo.PNG')] bg-cover flex justify-center items-center">
       <div className="container mx-auto px-4">
-      <h3 className="text-lg font-medium mb-2 text-center">Liste des Rendez-vous</h3>
-      <div className="mb-16 flex justify-center">
+       <div className="flex justify-between items-center mb-4">
         <input
           type="text"
-          placeholder="Rechercher par nom de patient ou date"
+          placeholder="Rechercher par nom de patient"
           onChange={(e) => handleSearchChange(e.target.value)}
           className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          <select className="px-4 py-2 border border-gray-300 rounded-md" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+            <option value="nom">Trier par Nom</option>
+            <option value="date">Trier par Date</option>
+          </select>
       </div>
       <ToastContainer />
 

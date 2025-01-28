@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { link } from "fs";
 
 // Définir les types pour les props
 interface NavLink {

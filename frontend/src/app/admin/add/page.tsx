@@ -1,10 +1,10 @@
 "use client";
 
+import "react-toastify/dist/ReactToastify.css";
 import React from "react";
 import axios from "axios";
 import Personnel from "@/app/components/PersonnelAdd";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import withRoleProtection from "@/app/components/protectionPage";
 
 const AddPersonnelPage: React.FC = () => {

@@ -8,6 +8,12 @@ interface Medicament {
   duree: string;
 }
 
+interface Patient {
+  _id: string;
+  nom: string;
+  codePatient: string;
+}
+
 interface OrdonnanceFormProps {
   fetchOrdonnances: () => void;
 }
@@ -25,7 +31,7 @@ const OrdonnanceForm: React.FC<OrdonnanceFormProps> = ({ fetchOrdonnances }) => 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [patients, setPatients] = useState<any[]>([]);
+  const [patients, setPatients] = useState<Patient []>([]);
   const [personnels, setPersonnels] = useState<any[]>([]);
 
   
@@ -34,10 +40,12 @@ const OrdonnanceForm: React.FC<OrdonnanceFormProps> = ({ fetchOrdonnances }) => 
     const fetchData = async () => {
       try {
         const [patientsRes, personnelsRes] = await Promise.all([
-          axios.get('http://localhost:5000/patients'),
+          axios.get<Patient[]>('http://localhost:5000/patients'),
           axios.get('http://localhost:5000/personnels'),
         ]);
-        setPatients(patientsRes.data);
+        const sortedPatients = patientsRes.data
+        .sort((a, b) => a.nom.localeCompare(b.nom));
+        setPatients(sortedPatients);
         setPersonnels(personnelsRes.data);
       } catch (err) {
         setError('Erreur lors du chargement des données');

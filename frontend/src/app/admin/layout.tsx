@@ -12,9 +12,6 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [adminDetails, setAdminDetails] = useState<string | null>(null);
-    
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
   
     
     const fetchUserDetails = async () => {

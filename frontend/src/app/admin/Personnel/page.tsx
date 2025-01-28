@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import PersonnelList from '@/app/components/PersonnelList'
-import Link from "next/link";
 import {toast} from 'react-toastify';
 import axios from 'axios';
 import withRoleProtection from '@/app/components/protectionPage';
@@ -13,9 +12,6 @@ const PersonnelListe: React.FC =() => {
     const [personnels, setPersonnels] = useState([]);
     const [adminDetails, setAdminDetails] = useState<string | null>(null);
     
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
-  
     
     const fetchUserDetails = async () => {
         if (typeof window === "undefined") return;

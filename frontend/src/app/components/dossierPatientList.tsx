@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 
 interface Diagnostics {
     note: string;
@@ -236,14 +235,14 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
               />
               <input
-  type="date"
-  value={diag.DateDiagnostic ? new Date(diag.DateDiagnostic).toISOString().slice(0, 10) : ''}
-  onChange={(e) => {
-    const updatedDiag = [...selectedDossier.diagnostic];
-    updatedDiag[idx].DateDiagnostic = e.target.value;
-    setSelectedDossier({ ...selectedDossier, diagnostic: updatedDiag });
-  }}
-/>
+                type="date"
+                value={diag.DateDiagnostic ? new Date(diag.DateDiagnostic).toISOString().slice(0, 10) : ''}
+                onChange={(e) => {
+                  const updatedDiag = [...selectedDossier.diagnostic];
+                  updatedDiag[idx].DateDiagnostic = e.target.value;
+                  setSelectedDossier({ ...selectedDossier, diagnostic: updatedDiag });
+                }}
+              />
 
               <button
                 onClick={() => {
@@ -332,6 +331,13 @@ const dossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
           </button>
            ))}
           </div>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-2 sm:px-4 py-2 text-xs sm:text-sm rounded-md bg-cyan-400 hover:bg-cyan-500 disabled:opacity-50"
+          >
+          Suivant
+          </button>
       </div>
     </div>
   );

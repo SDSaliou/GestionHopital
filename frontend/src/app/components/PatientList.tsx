@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+"use client"
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Patient {
   _id: string;
@@ -8,23 +11,70 @@ interface Patient {
   numAssuranceMaladie: string;
   numTelephone: number;
   dateEntree: Date;
-  dossierMedical:string;
+  dossierMedical: string;
 }
 
 interface PatientListProps {
-  patients: Patient[];
   fetchPatients: () => void;
 }
 
-const PatientList: React.FC<PatientListProps> = ({ patients, fetchPatients }) => {
+const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [isEditing, setIsEditing] = useState(false);
   const [currentPatient, setCurrentPatient] = useState<Patient | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const patientsPerPage = 5;
+
+  // Charger les patients et les trier par nom
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get<Patient[]>("http://localhost:5000/patients");
+        const sortedPatients = response.data.sort((a, b) => a.nom.localeCompare(b.nom)); // Tri par nom
+        setPatients(sortedPatients);
+      } catch (err) {
+        console.error("Erreur lors de la récupération des patients :", err);
+        toast.error("Erreur lors de la récupération des patients.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Débouncer le terme de recherche 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  // Filtrer les patients et les trier
+  const filteredPatients = Array.isArray(patients)
+  ? patients
+      .filter(
+        (patient) =>
+          patient.nom.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+          patient.codePatient.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+          patient.numTelephone.toString().includes(debouncedSearchTerm.toLowerCase())
+      )
+      .sort((a, b) => a.nom.localeCompare(b.nom)) 
+  : [];
+
+
+  // Pagination
+  const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
+  const indexOfLastPatient = currentPage * patientsPerPage;
+  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+  const currentPatients = filteredPatients.slice(indexOfFirstPatient, indexOfLastPatient);
 
   // Supprimer un patient
   const handleDelete = async (patientId: string) => {
@@ -33,12 +83,11 @@ const PatientList: React.FC<PatientListProps> = ({ patients, fetchPatients }) =>
     }
     try {
       await axios.delete(`http://localhost:5000/patients/delete/${patientId}`);
-      setMessage("Patient supprimé avec succès !");
-      setError(""); 
+      toast.success("Patient supprimé avec succès !");
       fetchPatients(); 
     } catch (err) {
       console.error("Erreur de suppression :", err);
-      setError("Erreur lors de la suppression du patient. Veuillez réessayer.");
+      toast.error("Erreur lors de la suppression du patient.");
     }
   };
 
@@ -50,60 +99,28 @@ const PatientList: React.FC<PatientListProps> = ({ patients, fetchPatients }) =>
           `http://localhost:5000/patients/${currentPatient._id}`,
           currentPatient
         );
-        setMessage("Patient mis à jour avec succès !");
-        setError(""); 
+        toast.success("Patient mis à jour avec succès !");
         setIsEditing(false);
         setCurrentPatient(null);
         fetchPatients();
       } catch (err) {
         console.error("Erreur lors de la mise à jour :", err);
-        setError("Erreur lors de la mise à jour du patient. Veuillez réessayer.");
+        toast.error("Erreur lors de la mise à jour du patient.");
       }
     }
   };
 
-  // Débounce pour la recherche
-  const debounce = (func: Function, delay: number) => {
-    let timer: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const handleSearchChange = debounce((value: string) => {
-    setSearchTerm(value);
-  }, 300);
-
-  // Filtrer les patients en fonction du terme de recherche
-  const filteredPatients = patients.filter(
-    (patient) =>
-      patient.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.codePatient.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.numTelephone.toString().includes(searchTerm.toLowerCase())
-  );
-
-  // Pagination
-  const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
-  const indexOfLastPatient = currentPage * patientsPerPage;
-  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
-  const currentPatients = filteredPatients.slice(
-    indexOfFirstPatient,
-    indexOfLastPatient
-  );
-
   return (
     <div className="min-h-screen bg-[url('/Logo.PNG')] bg-cover flex justify-center items-center">
       <div className="container mx-auto px-4">
-        {message && <p className="text-green-500">{message}</p>}
-        {error && <p className="text-red-500">{error}</p>}
+      <ToastContainer />
 
         {/* Barre de recherche */}
         <div className="mb-16 flex justify-center">
           <input
             type="text"
             placeholder="Rechercher un patient"
-            onChange={(e) => handleSearchChange(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>

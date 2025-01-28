@@ -37,8 +37,10 @@ const RV: React.FC<RVProps> = ({ fetchRV }) => {
   // Récupérer les patients
   const fetchPatients = async () => {
     try {
-      const { data } = await axios.get<Patient[]>("http://localhost:5000/patients");
-      setPatients(data);
+      const  resPatient  = await axios.get<Patient[]>("http://localhost:5000/patients");
+      const sortedPatients = resPatient.data
+      .sort((a, b) => a.nom.localeCompare(b.nom));
+      setPatients(sortedPatients);
     } catch (error) {
       console.error("Erreur lors de la récupération des patients :", error);
       toast.error("Erreur lors de la récupération des patients.");
@@ -52,7 +54,9 @@ const RV: React.FC<RVProps> = ({ fetchRV }) => {
       const { data } = await axios.get<Medecin[]>("http://localhost:5000/personnels/medecins", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setMedecins(data);
+      const medOr = data
+      .sort((a,b) => a.nom.localeCompare(b.nom));
+      setMedecins(medOr);
     } catch (error: any) {
       if (error.response?.status === 401) {
         toast.error("Vous devez être connecté pour accéder à cette ressource.");
@@ -102,6 +106,12 @@ const RV: React.FC<RVProps> = ({ fetchRV }) => {
     const medecin = filteredMedecins.find((m) => m._id === selectedMedecin);
     if (!medecin || !isValidTime(medecin)) {
       toast.error("L'heure choisie n'est pas valide pour ce médecin.");
+      return;
+    }
+
+    const selectedDay = selectedDateTime.toLocaleString("fr-FR", { weekday: "long" }).toLowerCase();
+    if (!medecin.jourService.some((jour) => jour.toLowerCase() === selectedDay)) {
+      toast.error(`Le médecin n'est pas disponible le ${selectedDay}. Disponible uniquement les jours suivants : ${medecin.jourService.join(", ")}.`);
       return;
     }
 

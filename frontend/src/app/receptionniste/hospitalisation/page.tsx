@@ -5,7 +5,6 @@ import axios from "axios";
 import HospitalisationList from "@/app/components/HospitalisationList";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
 import withRoleProtection from "@/app/components/protectionPage";
 
 interface Patient {

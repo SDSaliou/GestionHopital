@@ -4,7 +4,7 @@ import React, { ReactNode, useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import axios from "axios";
 import Link from "next/link";
-import { toast } from "react-toastify";
+
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [recDetails, setRecDetails] = useState<string | null>(null);

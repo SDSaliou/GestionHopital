@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jsPDF } from "jspdf";
+import { FiEye, FiEdit, FiDownload } from "react-icons/fi";
 
 interface Medicament {
   nom: string;
@@ -288,30 +289,32 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
           <p>
             <strong>Date :</strong> {new Date(ordonnance.datePrescription).toLocaleDateString()}
           </p>
-          <div className="mt-2">
-            <button
-              className="bg-blue-500 text-white py-2 px-4 rounded mr-2"
-              onClick={() => setSelectedOrdonnance(ordonnance)}
-            >
-              Voir
-            </button>
+          <div className="mt-2 flex space-x-2">
+          {/* Voir */}
+          <button
+            className="flex items-center bg-blue-500 text-white py-2 px-4 rounded"
+            onClick={() => setSelectedOrdonnance(ordonnance)}
+          >
+            <FiEye className="mr-2" />
+          </button>
             
-            <button
-              className="bg-green-500 text-white py-2 px-2 rounded mr-2"
-              onClick={() => generatePDF(ordonnance)}
-              >
-              Télécharger
-
-            </button>
-            <button
-              className="bg-yellow-500 text-white py-2 px-2 rounded"
-              onClick={() => {
-                
-                setModifier(true);
-              }}
-            >
-              Modifier
-            </button>
+            {/* Télécharger */}
+          <button
+            className="flex items-center bg-green-500 text-white py-2 px-4 rounded"
+            onClick={() => generatePDF(ordonnance)}
+          >
+            <FiDownload className="mr-2" /> 
+          </button>
+            {/* Modifier */}
+          <button
+            className="flex items-center bg-yellow-500 text-white py-2 px-4 rounded"
+            onClick={() => {
+              setSelectedOrdonnance(ordonnance);
+              setModifier(true);
+            }}
+          >
+            <FiEdit className="mr-2" /> 
+          </button>
           </div>
         </div>
       ))}

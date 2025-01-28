@@ -41,7 +41,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
   const [loading, setLoading] = useState(false);
   const [modifier, setModifier] = useState(false);
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [selectType, setSelectType] = useState<string>("");
+  const [selectType, setSelectType] = useState("nom");
 
   const hospiPerPage = 5;
 
@@ -50,13 +50,18 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
       try {
         setLoading(true);
         const [hospiRes, chambresRes, patientRes] = await Promise.all([
-          axios.get("http://localhost:5000/hospitalisation"),
+          axios.get<Hospitalisation[]>("http://localhost:5000/hospitalisation"),
           axios.get("http://localhost:5000/chambre"),
-          axios.get("http://localhost:5000/patients"),
+          axios.get<Patient[]>("http://localhost:5000/patients"),
         ]);
-        setHospitalisation(hospiRes.data);
+        const sortedPatients = patientRes.data.sort((a, b) => a.nom.localeCompare(b.nom));
+        setPatients(sortedPatients);
+
+        const sortedHospi = hospiRes.data.sort((a, b) =>
+          (a.patient?.nom || "").localeCompare(b.patient?.nom || "")
+        );
+        setHospitalisation(sortedHospi);
         setChambres(chambresRes.data);
-        setPatients(patientRes.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
         toast.error("Erreur lors de la récupération des données.");
@@ -64,8 +69,16 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   // Filtrer selon le type choisi
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -82,19 +95,21 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
     );
   };
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 300);
-    return () => clearTimeout(handler);
-  }, [searchTerm]);
-
-  const filteredHospi = (hospitalisations || []).filter(
-    (hosp) =>
-      hosp.patient?.nom.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-      hosp.patient?.codePatient.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-      hosp.chambre?.numero.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-  );
+  const filteredHospi = hospitalisation
+    .filter((hosp) =>
+      [hosp.patient?.nom, hosp.patient?.codePatient, hosp.chambre?.numero]
+        .filter(Boolean)
+        .some((value) => value?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+    )
+    .sort((a, b) => {
+      if (selectType === "nom") {
+        return (a.patient?.nom || "").localeCompare(b.patient?.nom || "");
+      }
+      if (selectType === "dateEntree") {
+        return new Date(a.dateEntree).getTime() - new Date(b.dateEntree).getTime();
+      }
+      return 0;
+    });
   
   
 
@@ -128,6 +143,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
         await axios.put(`http://localhost:5000/hospitalisation/${currentHospi._id}`, updatedHospi);
         toast.success("Hospitalisation mise à jour avec succès !");
         setCurrentHospi(null);
+        fetchHospi();
         setModifier(false);
         setCurrentPage(1);
       } catch (err) {
@@ -142,7 +158,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
   return (
     <div className="min-h-screen bg-[url('/Logo.PNG')] bg-cover flex justify-center items-center">
       <div className="container mx-auto px-4">
-        <div className="mb-16 flex justify-center">
+        <div className="flex justify-between items-center mb-4">
           <input
             type="text"
             placeholder="Rechercher par patient, code ou numéro de chambre..."
@@ -150,7 +166,15 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({ hospitalisati
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm"
           />
+          <select
+            onChange={(e) => setSelectType(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="nom">Trier par nom</option>
+            <option value="dateEntree">Trier par date d'entrée</option>
+          </select>
         </div>
+
         <ToastContainer />
         {modifier && currentHospi && (
           <div className="mb-6 bg-white p-6 shadow-lg rounded-md">

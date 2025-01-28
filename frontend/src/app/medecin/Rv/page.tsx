@@ -161,20 +161,35 @@ const Medecin: React.FC = () => {
     <div className="min-h-screen flex justify-center items-center">
       <div className="text-center">
          <h2 className="text-2xl font-bold text-black-800 ">Mes Rendez-vous</h2>
-         <div className="mb-6 mt-4">
+         <div className="mb-6 mt-4 flex flex-col items-center bg-gray-50 p-6 rounded-lg shadow-md">
           <Calendar
-           onChange={handleDateClick}
-             value={selectedDate}
-             tileContent={({ date }) => {
-               const formattedDate = date.toISOString().split("T")[0];
-               const hasRv = Rv.some(
-                 (rv) => new Date(rv.date).toISOString().split("T")[0] === formattedDate
-               );
-               return hasRv ? <span className="bg-sky-600 text-white rounded-full px-2">●</span> : null;
-             }}
-             className="border-2 rounded-lg shadow-lg bg-white"
-           />
-         </div>
+            onChange={handleDateClick}
+            value={selectedDate}
+            tileContent={({ date }) => {
+              const formattedDate = date.toISOString().split("T")[0];
+              const hasRv = Rv.some(
+                (rv) => new Date(rv.date).toISOString().split("T")[0] === formattedDate
+              );
+              return hasRv ? (
+                <span className="bg-cyan-700 text-white rounded-full px-2 text-sm">
+                  ●
+                </span>
+              ) : null;
+            }}
+            className="w-full max-w-md mx-auto border border-gray-300 rounded-lg shadow-md p-4 bg-white"
+            tileClassName={({ date }) => {
+              const formattedDate = date.toISOString().split("T")[0];
+              const hasRv = Rv.some(
+                (rv) => new Date(rv.date).toISOString().split("T")[0] === formattedDate
+              );
+              return hasRv ? "text-cyan-600 font-bold" : "";
+            }}
+            tileDisabled={({ date }) => date < new Date()} // Désactiver les dates passées
+            next2Label={null} 
+            prev2Label={null} 
+            />
+        </div>
+
          {selectedDate && (
            <div className="mt-6">
              <h3 className="text-xl font-semibold text-black-700 mb-4">Détails des Rendez-vous</h3>

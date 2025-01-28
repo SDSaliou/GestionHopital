@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const Patients= require("./patients");
-const Chambre = require("./chambre");
+
 
 const HospitalisationSchema = new mongoose.Schema({
     patient: {
