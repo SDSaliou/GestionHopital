@@ -97,12 +97,15 @@ const DossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
   }, [searchTerm]);
 
   // Filtrer les patients en fonction du terme de recherche
-  const filteredDossier = (Array.isArray(dossierPatient)? dossierPatient: []).filter(
+  const filteredDossier = Array.isArray(dossierPatient)
+  ? dossierPatient
+  .filter(
     (doss) =>
       doss.patient?.nom.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
       doss.patient?.dossierMedical.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
       doss.numeroDossier?.toString().includes(debouncedSearchTerm.toLowerCase())
-  );
+  )
+  : [];
 
   // Pagination
   const totalPages = Math.ceil(filteredDossier.length / dossierPage);
@@ -218,8 +221,7 @@ const DossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
                 }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
               />
-              <input
-                type="text"
+              <select
                 value={diag.type}
                 onChange={(e) => {
                   const updatedDiag = [...selectedDossier.diagnostic];
@@ -227,7 +229,12 @@ const DossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
                   setSelectedDossier({ ...selectedDossier, diagnostic: updatedDiag });
                 }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
-              />
+              >
+                 <option value="">Quel Type ?</option>
+                    <option value="Consultation">Consultation</option>
+                    <option value="Intervention">Intervention</option>
+                    <option value="Suivi">Suivi</option>
+                  </select>
               <input
                 type="text"
                 value={diag.traitement}

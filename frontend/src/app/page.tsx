@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
+
 
 const HomePage: React.FC = () => {
   return (
@@ -13,42 +13,7 @@ const HomePage: React.FC = () => {
         backgroundAttachment: "fixed",
       }}
     >
-      {/* Header */}
-      <header className="mx-auto max-w-screen-xl  px-4 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
-          <div className="flex justify-start">
-            <Link className="flex items-center" href="/">
-              <Image
-                className="block h-8 w-auto rounded-full object-cover"
-                height={32}
-                width={32}
-                src="/Logo.PNG"
-                alt="Logo"
-              />
-            </Link>
-          </div>
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link href="#admin" className="text-white hover:text-blue-900 text-sm font-medium">
-              Administration
-            </Link>
-            <Link href="#doctors" className="text-white hover:text-blue-900 text-sm font-medium">
-              Médecins
-            </Link>
-            <Link href="#reception" className="text-white hover:text-blue-900 text-sm font-medium">
-              Réception
-            </Link>
-            <Link href="#laboratory" className="text-white hover:text-blue-900 text-sm font-medium">
-              Laboratoire
-            </Link>
-            <Link
-              href="/login"
-              className="text-white bg-blue-800 hover:bg-blue-900 inline-flex items-center justify-center px-3 py-2 text-sm font-medium rounded-md shadow-sm"
-            >
-              Se connecter
-            </Link>
-          </nav>
-        </div>
-      </header>
+     
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 text-center">
@@ -59,11 +24,11 @@ const HomePage: React.FC = () => {
           Un système complet pour gérer le personnel hospitalier, les dossiers des patients, les rendez-vous, les hospitalisations, et bien plus.
         </p>
         <div className="mt-8">
-          <a href="#admin">
-            <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-              WERRAL AK DIAM
+          <Link href="/login">
+            <button className="px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700">
+              Connexion
             </button>
-          </a>
+          </Link>
         </div>
       </section>
 

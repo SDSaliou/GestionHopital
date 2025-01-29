@@ -294,8 +294,7 @@ const DossierPourID: React.FC= () => {
                   }}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
                 />
-                <input
-                  type="text"
+                <select
                   value={diag.type}
                   onChange={(e) => {
                     const updatedDiag = [...dossier.diagnostic];
@@ -303,7 +302,12 @@ const DossierPourID: React.FC= () => {
                     setDossier({ ...dossier, diagnostic: updatedDiag });
                   }}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
+                >
+                   <option value="">Quel Type ?</option>
+                    <option value="Consultation">Consultation</option>
+                    <option value="Intervention">Intervention</option>
+                    <option value="Suivi">Suivi</option>
+                  </select>
                 <input
                   type="text"
                   value={diag.traitement}
