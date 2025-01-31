@@ -342,10 +342,16 @@ const DossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
           </button>
            ))}
           </div>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-2 sm:px-4 py-2 text-xs sm:text-sm rounded-md bg-cyan-400 hover:bg-cyan-500 disabled:opacity-50"
+          >
+            Suivant
+          </button>
+      </div>
       </div>
     </div>
-    </div>
-
   );
 };
 
