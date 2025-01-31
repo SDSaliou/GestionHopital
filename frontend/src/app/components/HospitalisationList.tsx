@@ -89,11 +89,13 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({fetchHospi }) 
     );
   };
 
-  const filteredHospi = hospitalisation
-    .filter((hosp) =>
-      [hosp.patient?.nom, hosp.patient?.codePatient, hosp.chambre?.numero]
-        .filter(Boolean)
-        .some((value) => value?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+  const filteredHospi = Array.isArray(hospitalisation)
+  ?hospitalisation
+    .filter(
+      (hosp) =>
+      hosp.patient?.nom.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      (hosp.patient?.codePatient.toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
+      (hosp.chambre?.numero.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
     )
     .sort((a, b) => {
       if (selectType === "nom") {
@@ -103,7 +105,8 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({fetchHospi }) 
         return new Date(a.dateEntree).getTime() - new Date(b.dateEntree).getTime();
       }
       return 0;
-    });
+    })
+    :[];
   
   
 
