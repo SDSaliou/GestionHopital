@@ -11,7 +11,12 @@ const port = process.env.PORT || 8080
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ["https://gestion-hopital-chi.vercel.app"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Gestion des formulaires
 
@@ -22,6 +27,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 // Routes
+const router = express.Router();
 app.use('/patients', require('./route/patientsRoute'));
 app.use('/personnels', require('./route/personnelRoute'));
 app.use('/rendezvous', require('./route/RvRoute'));
@@ -31,6 +37,8 @@ app.use('/hospitalisation', require('./route/HospitalisationRoute'));
 app.use('/dossier',require('./route/DossierRoute'));
 
 
+
+app.use('/api', router);
 
 // Route de base
 app.get('/', (req, res) => {
@@ -61,3 +69,6 @@ mongoose.connection.on('disconnected', () => {
         .then(() => console.log('Reconnexion à MongoDB réussie !'))
         .catch((err) => console.error('Erreur de reconnexion à MongoDB :', err.message));
 });
+
+
+module.exports = app;

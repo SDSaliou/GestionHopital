@@ -1,12 +1,12 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "api/index.js",
   "engines": {
     "node": "20.16.0"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node api/index.js",
     "vercel-build": "echo 'No build required'"
   },
   "author": "",
