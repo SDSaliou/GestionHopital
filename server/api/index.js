@@ -28,13 +28,13 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Routes
 const router = express.Router();
-app.use('/patients', require('./route/patientsRoute'));
-app.use('/personnels', require('./route/personnelRoute'));
-app.use('/rendezvous', require('./route/RvRoute'));
-app.use('/ordonnance', require('./route/OrdonnanceRoute'));
-app.use('/chambre', require('./route/ChambreRoute'));
-app.use('/hospitalisation', require('./route/HospitalisationRoute'));
-app.use('/dossier',require('./route/DossierRoute'));
+app.use('/patients', require('../route/patientsRoute'));
+app.use('/personnels', require('../route/personnelRoute'));
+app.use('/rendezvous', require('../route/RvRoute'));
+app.use('/ordonnance', require('../route/OrdonnanceRoute'));
+app.use('/chambre', require('../route/ChambreRoute'));
+app.use('/hospitalisation', require('../route/HospitalisationRoute'));
+app.use('/dossier',require('../route/DossierRoute'));
 
 
 
