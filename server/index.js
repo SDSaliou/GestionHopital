@@ -62,5 +62,3 @@ mongoose.connection.on('disconnected', () => {
         .then(() => console.log('Reconnexion à MongoDB réussie !'))
         .catch((err) => console.error('Erreur de reconnexion à MongoDB :', err.message));
 });
-
-module.exports = app;
