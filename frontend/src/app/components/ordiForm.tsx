@@ -45,8 +45,8 @@ const OrdonnanceForm: React.FC<OrdonnanceFormProps> = ({ fetchOrdonnances }) => 
     const fetchData = async () => {
       try {
         const [patientsRes, personnelsRes] = await Promise.all([
-          axios.get<Patient[]>('http://localhost:5000/patients'),
-          axios.get('http://localhost:5000/personnels'),
+          axios.get<Patient[]>('http://${process.env.NEXT_PUBLIC_API_URL}/patients'),
+          axios.get('http://${process.env.NEXT_PUBLIC_API_URL}/personnels'),
         ]);
         const sortedPatients = patientsRes.data
         .sort((a, b) => a.nom.localeCompare(b.nom));
@@ -97,7 +97,7 @@ const OrdonnanceForm: React.FC<OrdonnanceFormProps> = ({ fetchOrdonnances }) => 
     }
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/ordonnance/add', formData);
+      await axios.post('http://${process.env.NEXT_PUBLIC_API_URL}/ordonnance/add', formData);
       setSuccessMessage('Ordonnance ajoutée avec succès!');
       fetchOrdonnances(); 
       setFormData({

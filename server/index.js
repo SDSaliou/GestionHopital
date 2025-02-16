@@ -5,9 +5,9 @@ const dotenv = require('dotenv');
 
 
 dotenv.config();
+console.log("MONGO_URI:",process.env.MONGO_URI);
 
 const app = express();
-const PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(cors(
@@ -19,6 +19,12 @@ app.use(cors(
 ));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Gestion des formulaires
+
+// Connexion à MongoDB
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('MongoDB connecté !'))
+    .catch((err) => console.error('Erreur de connexion à MongoDB :', err.message));
+
 
 // Routes
 app.use('/patients', require('./route/patientsRoute'));
@@ -47,16 +53,7 @@ app.use((err, req, res, next) => {
     res.status(500).send('Erreur interne du serveur');
 });
 
-// Connexion à MongoDB
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log('MongoDB connecté !');
-        app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));
-    })
-    .catch((err) => {
-        console.error('Erreur de connexion à MongoDB :', err.message);
-        process.exit(1); // Arrêter l'application en cas d'échec critique
-    });
+
 
 // Gestion des déconnexions MongoDB
 mongoose.connection.on('disconnected', () => {
@@ -65,3 +62,5 @@ mongoose.connection.on('disconnected', () => {
         .then(() => console.log('Reconnexion à MongoDB réussie !'))
         .catch((err) => console.error('Erreur de reconnexion à MongoDB :', err.message));
 });
+
+module.exports = app;

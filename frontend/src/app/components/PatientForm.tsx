@@ -30,7 +30,7 @@ const Patient: React.FC<PatientProps> = ({ fetchPatients }) => {
             return;
         }
         try {
-            await axios.post("http://localhost:5000/patients/Add", { ...patients });
+            await axios.post("http://${process.env.NEXT_PUBLIC_API_URL}/patients/Add", { ...patients });
 
             setSuccessMessage("Patient ajouté avec succès !");
             setErrorMessage("");

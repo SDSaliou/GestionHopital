@@ -37,7 +37,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
   useEffect(() => {
     const fetchOrdonnances = async () => {
       try {
-        await axios.get("http://localhost:5000/ordonnance/");
+        await axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/ordonnance/");
         setLoading(false);
       } catch {
         setError("Erreur lors du chargement des ordonnances.");
@@ -81,7 +81,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
 
   const handleSaveModifier = async (updatedOrdonnance: Ordonnance) => {
     try {
-      await axios.put(`http://localhost:5000/ordonnance/update/${updatedOrdonnance._id}`, updatedOrdonnance);
+      await axios.put(`http://${process.env.NEXT_PUBLIC_API_URL}/ordonnance/update/${updatedOrdonnance._id}`, updatedOrdonnance);
       setModifier(false);
       setSelectedOrdonnance(updatedOrdonnance);
       fetchOrdonnances();

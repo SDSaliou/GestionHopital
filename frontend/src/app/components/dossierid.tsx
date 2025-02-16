@@ -57,8 +57,8 @@ const DossierPourID: React.FC= () => {
       try {
         setLoading(true);
         const [patientsRes, dossiersRes] = await Promise.all([
-          axios.get<Patient[]>("http://localhost:5000/patients"),
-          axios.get("http://localhost:5000/dossier"),
+          axios.get<Patient[]>("http://${process.env.NEXT_PUBLIC_API_URL}/patients"),
+          axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/dossier"),
         ]);
         const sortedPatients = patientsRes.data.sort((a, b) => a.nom.localeCompare(b.nom));
         setPatientD(sortedPatients);
@@ -78,7 +78,7 @@ const DossierPourID: React.FC= () => {
   const handleModifier = async(updatedDossier: Dossier) => {
       try {
         if (!updatedDossier._id) return;
-        await axios.put(`http://localhost:5000/dossier/update/${updatedDossier._id}`, updatedDossier);
+        await axios.put(`http://${process.env.NEXT_PUBLIC_API_URL}/dossier/update/${updatedDossier._id}`, updatedDossier);
         toast.success("Dossier mis à jour avec succès !");
         setDossi((prev) =>
           prev.map((dossier) => (dossier._id === updatedDossier._id ? updatedDossier : dossier))
@@ -117,7 +117,7 @@ const DossierPourID: React.FC= () => {
             type: create.type,
           }
         ] };
-      await axios.post("http://localhost:5000/dossier/add", newDossier);
+      await axios.post("http://${process.env.NEXT_PUBLIC_API_URL}/dossier/add", newDossier);
       toast.success("Dossier créé avec succès !");
       setDossi((prev) => [...prev, { ...newDossier }]);
       setShowCreateForm(false)

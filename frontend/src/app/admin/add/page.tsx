@@ -10,7 +10,7 @@ import withRoleProtection from "@/app/components/protectionPage";
 const AddPersonnelPage: React.FC = () => {
     const fetchPersonnels = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/personnels/"); 
+        const response = await axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/personnels/"); 
         console.log("Personnel ajouté :", response.data);
       } catch (error) {
         console.error("Erreur en récupérant les données :", error);

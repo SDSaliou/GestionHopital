@@ -26,7 +26,7 @@ const PersonnelListe: React.FC =() => {
         }
 
         try {
-            const {data} = await axios.get(`http://localhost:5000/personnels/${userId}`, {
+            const {data} = await axios.get(`http://${process.env.NEXT_PUBLIC_API_URL}/personnels/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             }
             );
@@ -53,7 +53,7 @@ const PersonnelListe: React.FC =() => {
     const fetchData = async () => {
         try {
             const personnelsRes= await
-                axios.get("http://localhost:5000/personnels/")
+                axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/personnels/")
             setPersonnels(personnelsRes.data);
         } catch (error) {
             console.error("Erreur lors de la récupération des données :", error);

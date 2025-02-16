@@ -36,8 +36,8 @@ const HospiForm: React.FC<HospiFormProps> = ({fetchHospi}) =>{
         const fetchData = async () => {
           try {
             const [patientsRes, chambreRes] = await Promise.all([
-              axios.get<Patient[]>('http://localhost:5000/patients'),
-              axios.get('http://localhost:5000/chambre/'),
+              axios.get<Patient[]>('http://${process.env.NEXT_PUBLIC_API_URL}/patients'),
+              axios.get('http://${process.env.NEXT_PUBLIC_API_URL}/chambre/'),
             ]);
             const sortedPatients = patientsRes.data
             .sort((a, b) => a.nom.localeCompare(b.nom));
@@ -60,7 +60,7 @@ const HospiForm: React.FC<HospiFormProps> = ({fetchHospi}) =>{
         e.preventDefault();
         setLoading(true);
         try {
-          await axios.post('http://localhost:5000/hospitalisation/add', newHospi);
+          await axios.post('http://${process.env.NEXT_PUBLIC_API_URL}/hospitalisation/add', newHospi);
           setNewHospi({
             patient: '',
             chambre: '',

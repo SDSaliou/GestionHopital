@@ -53,7 +53,7 @@ const Medecin: React.FC = () => {
     }
 
     try {
-      const { data } = await axios.get(`http://localhost:5000/personnels/${userId}`, {
+      const { data } = await axios.get(`http://${process.env.NEXT_PUBLIC_API_URL}/personnels/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
  });
       setRv(data);
@@ -75,7 +75,7 @@ const Medecin: React.FC = () => {
     }
 
     try {
-      const { data } = await axios.get(`http://localhost:5000/rendezvous/med?medecinId=${userId}`, {
+      const { data } = await axios.get(`http://${process.env.NEXT_PUBLIC_API_URL}/rendezvous/med?medecinId=${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setRv(data);
@@ -92,7 +92,7 @@ const Medecin: React.FC = () => {
       return;
     }
     try {
-      const { data } = await axios.get(`http://localhost:5000/dossier/patient/${patientId}`);
+      const { data } = await axios.get(`http://${process.env.NEXT_PUBLIC_API_URL}/dossier/patient/${patientId}`);
       console.log("Dossier récupéré :", data);
       setDossier(data);
       setDossierOpen(true);

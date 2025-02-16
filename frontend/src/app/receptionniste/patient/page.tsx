@@ -20,7 +20,7 @@ const PatientListe: React.FC = () => {
     
           if (!token || !userId) throw new Error("Utilisateur non authentifié.");
     
-          const { data } = await axios.get(`http://localhost:5000/personnels/${userId}`, {
+          const { data } = await axios.get(`http://${process.env.NEXT_PUBLIC_API_URL}/personnels/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setRecDetails(data.nom);
@@ -39,7 +39,7 @@ const PatientListe: React.FC = () => {
  // Fonction pour récupérer les patients
   const fetchPatients = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/patients/");
+      const response = await axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/patients/");
       setPatients(response.data); 
       console.log("Patients récupérés :", response.data);
     } catch (error) {

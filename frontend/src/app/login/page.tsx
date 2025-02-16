@@ -38,12 +38,12 @@ const LoginPage: React.FC = () => {
     
         try {
             
-            const res = await axios.post("https://gestion-hopital-api.vercel.app/personnels/login", {
+            const res = await axios.post("${process.env.NEXT_PUBLIC_API_URL}/personnels/login", {
                 nom,
                 password,
                 services,
             });
-    
+            console.log("reponse API:", res.data)
            
             if (res.data.token) {
                 

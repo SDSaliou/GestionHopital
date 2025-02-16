@@ -26,7 +26,7 @@ const Ordonnance: React.FC = () => {
 
     try {
       await axios.get(
-        `http://localhost:5000/personnels/${userId}`,
+        `http://${process.env.NEXT_PUBLIC_API_URL}/personnels/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -49,7 +49,7 @@ const Ordonnance: React.FC = () => {
     }
 
     try {
-      const { data } = await axios.get("http://localhost:5000/ordonnance/", {
+      const { data } = await axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/ordonnance/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrdonnances(data);

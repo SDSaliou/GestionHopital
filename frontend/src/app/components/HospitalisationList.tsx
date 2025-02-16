@@ -47,9 +47,9 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({fetchHospi }) 
     const fetchData = async () => {
       try {
         const [hospiRes, chambresRes, patientRes] = await Promise.all([
-          axios.get<Hospitalisation[]>("http://localhost:5000/hospitalisation"),
-          axios.get("http://localhost:5000/chambre"),
-          axios.get<Patient[]>("http://localhost:5000/patients"),
+          axios.get<Hospitalisation[]>("http://${process.env.NEXT_PUBLIC_API_URL}/hospitalisation"),
+          axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/chambre"),
+          axios.get<Patient[]>("http://${process.env.NEXT_PUBLIC_API_URL}/patients"),
         ]);
         const sortedPatients = patientRes.data.sort((a, b) => a.nom.localeCompare(b.nom));
         setPatients(sortedPatients);
@@ -137,7 +137,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({fetchHospi }) 
       };
   
       try {
-        await axios.put(`http://localhost:5000/hospitalisation/${currentHospi._id}`, updatedHospi);
+        await axios.put(`http://${process.env.NEXT_PUBLIC_API_URL}/hospitalisation/${currentHospi._id}`, updatedHospi);
         toast.success("Hospitalisation mise à jour avec succès !");
         setCurrentHospi(null);
         fetchHospi();

@@ -25,7 +25,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
 
         try {
-            const {data} = await axios.get(`http://localhost:5000/personnels/${userId}`, {
+            const {data} = await axios.get(`http://${process.env.NEXT_PUBLIC_API_URL}/personnels/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             }
             );

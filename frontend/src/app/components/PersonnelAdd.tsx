@@ -57,7 +57,7 @@ const Personnel: React.FC<PersonnelProps> = ({ fetchPersonnel }) => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:5000/personnels/add", { ...personnels });
+      await axios.post("http://${process.env.NEXT_PUBLIC_API_URL}/personnels/add", { ...personnels });
       toast.success("Personnel ajouté avec succès.");
       fetchPersonnel();
 

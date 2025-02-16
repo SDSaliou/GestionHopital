@@ -33,7 +33,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
     const fetchData = async () => {
       try {
        
-        const response = await axios.get<Patient[]>("http://localhost:5000/patients");
+        const response = await axios.get<Patient[]>("http://${process.env.NEXT_PUBLIC_API_URL}/patients");
         const sortedPatients = response.data.sort((a, b) => a.nom.localeCompare(b.nom)); // Tri par nom
         setPatients(sortedPatients);
       } catch (err) {
@@ -78,7 +78,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
       return;
     }
     try {
-      await axios.delete(`http://localhost:5000/patients/delete/${patientId}`);
+      await axios.delete(`http://${process.env.NEXT_PUBLIC_API_URL}/patients/delete/${patientId}`);
       toast.success("Patient supprimé avec succès !");
       fetchPatients(); 
     } catch (err) {
@@ -92,7 +92,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
     if (currentPatient) {
       try {
         await axios.put(
-          `http://localhost:5000/patients/${currentPatient._id}`,
+          `http://${process.env.NEXT_PUBLIC_API_URL}/patients/${currentPatient._id}`,
           currentPatient
         );
         toast.success("Patient mis à jour avec succès !");

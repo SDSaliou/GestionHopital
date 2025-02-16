@@ -11,7 +11,7 @@ const DossiersPage: React.FC = () => {
 
     const fetchDoPatient = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/dossier');
+            const response = await axios.get('http://${process.env.NEXT_PUBLIC_API_URL}/dossier');
             setDossierPatient(response.data); 
             
         } catch (error) {

@@ -15,7 +15,7 @@ const Hospitalisation: React.FC = () => {
   // Fonction pour récupérer les données des hospitalisations
   const fetchHospi = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/hospitalisation/");
+      const response = await axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/hospitalisation/");
       console.log("Hospi récupérés :", response.data);
       } catch (error) {
         console.error('Erreur en récupérant les hospitalisations', error);
