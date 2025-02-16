@@ -10,7 +10,13 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Middleware
-app.use(cors());
+app.use(cors(
+    {
+        origin: ["https://gestion-hopital-chi.vercel.app"],
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true
+    }
+));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Gestion des formulaires
 
