@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+const port = process.env.PORT || 8080
 
 const app = express();
 
@@ -39,6 +40,10 @@ app.get('/', (req, res) => {
 // Gestion des erreurs 404
 app.use((req, res, next) => {
     res.status(404).send('Route introuvable');
+});
+
+app.listen(port,() =>{
+    `Server started on port ${port}`;
 });
 
 // Middleware pour les erreurs générales
