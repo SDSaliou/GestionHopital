@@ -10,7 +10,7 @@ import withRoleProtection from "@/app/components/protectionPage";
 const AddPersonnelPage: React.FC = () => {
     const fetchPersonnels = async () => {
       try {
-        const response = await axios.get("http://gestion-hopital-api.vercel.app/personnels/"); 
+        const response = await axios.get("https://gestion-hopital-api.vercel.app/personnels/"); 
         console.log("Personnel ajouté :", response.data);
       } catch (error) {
         console.error("Erreur en récupérant les données :", error);

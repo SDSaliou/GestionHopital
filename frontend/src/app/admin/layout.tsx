@@ -25,7 +25,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
 
         try {
-            const {data} = await axios.get(`http://gestion-hopital-api.vercel.app/personnels/${userId}`, {
+            const {data} = await axios.get(`https://gestion-hopital-api.vercel.app/personnels/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             }
             );

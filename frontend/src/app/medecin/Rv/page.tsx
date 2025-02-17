@@ -53,7 +53,8 @@ const Medecin: React.FC = () => {
     }
 
     try {
-      const { data } = await axios.get(`http://gestion-hopital-api.vercel.app/personnels/${userId}`, {
+      const { data } = await axios.get(`https
+://gestion-hopital-api.vercel.app/personnels/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
  });
       setRv(data);
@@ -75,7 +76,7 @@ const Medecin: React.FC = () => {
     }
 
     try {
-      const { data } = await axios.get(`http://gestion-hopital-api.vercel.app/rendezvous/med?medecinId=${userId}`, {
+      const { data } = await axios.get(`https://gestion-hopital-api.vercel.app/rendezvous/med?medecinId=${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setRv(data);
@@ -92,7 +93,7 @@ const Medecin: React.FC = () => {
       return;
     }
     try {
-      const { data } = await axios.get(`http://gestion-hopital-api.vercel.app/dossier/patient/${patientId}`);
+      const { data } = await axios.get(`https://gestion-hopital-api.vercel.app/dossier/patient/${patientId}`);
       console.log("Dossier récupéré :", data);
       setDossier(data);
       setDossierOpen(true);

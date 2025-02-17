@@ -23,8 +23,7 @@ const PatientListe: React.FC = () => {
 
     try {
       const { data } = await axios.get(
-        `http://gestion-hopital-api.vercel.app
-/personnels/${userId}`,
+        `https://gestion-hopital-api.vercel.app/personnels/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -45,7 +44,7 @@ const PatientListe: React.FC = () => {
  // Fonction pour récupérer les patients
   const fetchPatients = async () => {
     try {
-      const response = await axios.get("http://gestion-hopital-api.vercel.app/patients/");
+      const response = await axios.get("https://gestion-hopital-api.vercel.app/patients/");
       console.log("Patients récupérés :", response.data);
     } catch (error) {
       console.error("Erreur en récupérant les patients :", error);

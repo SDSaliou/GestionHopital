@@ -33,7 +33,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
     const fetchData = async () => {
       try {
        
-        const response = await axios.get<Patient[]>("http://gestion-hopital-api.vercel.app/patients");
+        const response = await axios.get<Patient[]>("https://gestion-hopital-api.vercel.app/patients");
         const sortedPatients = response.data.sort((a, b) => a.nom.localeCompare(b.nom)); // Tri par nom
         setPatients(sortedPatients);
       } catch (err) {
@@ -78,8 +78,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
       return;
     }
     try {
-      await axios.delete(`http://gestion-hopital-api.vercel.app
-/patients/delete/${patientId}`);
+      await axios.delete(`https://gestion-hopital-api.vercel.app/patients/delete/${patientId}`);
       toast.success("Patient supprimé avec succès !");
       fetchPatients(); 
     } catch (err) {
@@ -93,8 +92,7 @@ const PatientList: React.FC<PatientListProps> = ({ fetchPatients }) => {
     if (currentPatient) {
       try {
         await axios.put(
-          `http://gestion-hopital-api.vercel.app
-/patients/${currentPatient._id}`,
+          `https://gestion-hopital-api.vercel.app/patients/${currentPatient._id}`,
           currentPatient
         );
         toast.success("Patient mis à jour avec succès !");

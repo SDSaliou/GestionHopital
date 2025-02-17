@@ -36,8 +36,8 @@ const HospiForm: React.FC<HospiFormProps> = ({fetchHospi}) =>{
         const fetchData = async () => {
           try {
             const [patientsRes, chambreRes] = await Promise.all([
-              axios.get<Patient[]>('http://gestion-hopital-api.vercel.app/patients'),
-              axios.get('http://gestion-hopital-api.vercel.app/chambre/'),
+              axios.get<Patient[]>('https://gestion-hopital-api.vercel.app/patients'),
+              axios.get('https://gestion-hopital-api.vercel.app/chambre/'),
             ]);
             const sortedPatients = patientsRes.data
             .sort((a, b) => a.nom.localeCompare(b.nom));
@@ -60,7 +60,7 @@ const HospiForm: React.FC<HospiFormProps> = ({fetchHospi}) =>{
         e.preventDefault();
         setLoading(true);
         try {
-          await axios.post('http://gestion-hopital-api.vercel.app/hospitalisation/add', newHospi);
+          await axios.post('https://gestion-hopital-api.vercel.app/hospitalisation/add', newHospi);
           setNewHospi({
             patient: '',
             chambre: '',

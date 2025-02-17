@@ -37,7 +37,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
   useEffect(() => {
     const fetchOrdonnances = async () => {
       try {
-        await axios.get("http://gestion-hopital-api.vercel.app/ordonnance/");
+        await axios.get("https://gestion-hopital-api.vercel.app/ordonnance/");
         setLoading(false);
       } catch {
         setError("Erreur lors du chargement des ordonnances.");
@@ -81,8 +81,7 @@ const OrdonnanceList: React.FC<OrdonnanceListProps> = ({ ordonnances, fetchOrdon
 
   const handleSaveModifier = async (updatedOrdonnance: Ordonnance) => {
     try {
-      await axios.put(`http://gestion-hopital-api.vercel.app
-/ordonnance/update/${updatedOrdonnance._id}`, updatedOrdonnance);
+      await axios.put(`https://gestion-hopital-api.vercel.app/ordonnance/update/${updatedOrdonnance._id}`, updatedOrdonnance);
       setModifier(false);
       setSelectedOrdonnance(updatedOrdonnance);
       fetchOrdonnances();

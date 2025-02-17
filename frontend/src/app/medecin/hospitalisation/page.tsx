@@ -13,7 +13,7 @@ const HospiPage: React.FC = () => {
 
   const fetchHospi = async () => {
     try {
-      const response = await axios.get("http://gestion-hopital-api.vercel.app/hospitalisation/");
+      const response = await axios.get("https://gestion-hopital-api.vercel.app/hospitalisation/");
       console.log("Hospi récupérés :", response.data);
       } catch (error) {
         console.error('Erreur en récupérant les hospitalisations', error);

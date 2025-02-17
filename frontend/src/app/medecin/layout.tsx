@@ -18,7 +18,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
 
       if (!token || !userId) throw new Error("Utilisateur non authentifié.");
 
-      const { data } = await axios.get(`http://gestion-hopital-api.vercel.app/personnels/${userId}`, {
+      const { data } = await axios.get(`https://gestion-hopital-api.vercel.app/personnels/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMedDetails(data.nom);

@@ -57,8 +57,8 @@ const DossierPourID: React.FC= () => {
       try {
         setLoading(true);
         const [patientsRes, dossiersRes] = await Promise.all([
-          axios.get<Patient[]>("http://gestion-hopital-api.vercel.app/patients"),
-          axios.get("http://gestion-hopital-api.vercel.app/dossier"),
+          axios.get<Patient[]>("https://gestion-hopital-api.vercel.app/patients"),
+          axios.get("https://gestion-hopital-api.vercel.app/dossier"),
         ]);
         const sortedPatients = patientsRes.data.sort((a, b) => a.nom.localeCompare(b.nom));
         setPatientD(sortedPatients);
@@ -78,8 +78,7 @@ const DossierPourID: React.FC= () => {
   const handleModifier = async(updatedDossier: Dossier) => {
       try {
         if (!updatedDossier._id) return;
-        await axios.put(`http://gestion-hopital-api.vercel.app
-/dossier/update/${updatedDossier._id}`, updatedDossier);
+        await axios.put(`https://gestion-hopital-api.vercel.app/dossier/update/${updatedDossier._id}`, updatedDossier);
         toast.success("Dossier mis à jour avec succès !");
         setDossi((prev) =>
           prev.map((dossier) => (dossier._id === updatedDossier._id ? updatedDossier : dossier))
@@ -118,7 +117,7 @@ const DossierPourID: React.FC= () => {
             type: create.type,
           }
         ] };
-      await axios.post("http://gestion-hopital-api.vercel.app/dossier/add", newDossier);
+      await axios.post("https://gestion-hopital-api.vercel.app/dossier/add", newDossier);
       toast.success("Dossier créé avec succès !");
       setDossi((prev) => [...prev, { ...newDossier }]);
       setShowCreateForm(false)

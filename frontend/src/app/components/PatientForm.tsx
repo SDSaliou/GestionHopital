@@ -30,7 +30,7 @@ const Patient: React.FC<PatientProps> = ({ fetchPatients }) => {
             return;
         }
         try {
-            await axios.post("http://gestion-hopital-api.vercel.app/patients/Add", { ...patients });
+            await axios.post("https://gestion-hopital-api.vercel.app/patients/Add", { ...patients });
 
             setSuccessMessage("Patient ajouté avec succès !");
             setErrorMessage("");

@@ -47,9 +47,9 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({fetchHospi }) 
     const fetchData = async () => {
       try {
         const [hospiRes, chambresRes, patientRes] = await Promise.all([
-          axios.get<Hospitalisation[]>("http://gestion-hopital-api.vercel.app/hospitalisation"),
-          axios.get("http://gestion-hopital-api.vercel.app/chambre"),
-          axios.get<Patient[]>("http://gestion-hopital-api.vercel.app/patients"),
+          axios.get<Hospitalisation[]>("https://gestion-hopital-api.vercel.app/hospitalisation"),
+          axios.get("https://gestion-hopital-api.vercel.app/chambre"),
+          axios.get<Patient[]>("https://gestion-hopital-api.vercel.app/patients"),
         ]);
         const sortedPatients = patientRes.data.sort((a, b) => a.nom.localeCompare(b.nom));
         setPatients(sortedPatients);
@@ -137,8 +137,7 @@ const HospitalisationList: React.FC<HospitalisationListProps> = ({fetchHospi }) 
       };
   
       try {
-        await axios.put(`http://gestion-hopital-api.vercel.app
-/hospitalisation/${currentHospi._id}`, updatedHospi);
+        await axios.put(`https://gestion-hopital-api.vercel.app/hospitalisation/${currentHospi._id}`, updatedHospi);
         toast.success("Hospitalisation mise à jour avec succès !");
         setCurrentHospi(null);
         fetchHospi();
