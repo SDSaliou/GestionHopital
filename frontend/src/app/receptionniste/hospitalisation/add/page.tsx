@@ -15,7 +15,7 @@ const Hospi: React.FC = () => {
     setLoading(true);
     toast.error("");
     try {
-      await axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/Chambre/");
+      await axios.get("http://gestion-hopital-api.vercel.app/Chambre/");
     } catch  {
       toast.error("Erreur lors de la récupération des données.");
     } finally {

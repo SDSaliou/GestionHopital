@@ -70,7 +70,7 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
     if (UPpersonnel) {
       try {
         await axios.put(
-          `http://${process.env.NEXT_PUBLIC_API_URL}/personnels/${UPpersonnel._id}`,
+          `http://gestion-hopital-api.vercel.app/personnels/${UPpersonnel._id}`,
           UPpersonnel
         );
         toast.success("Personnel mis à jour avec succès !");
@@ -90,7 +90,7 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
       return;
     }
       try {
-        await axios.delete(`http://${process.env.NEXT_PUBLIC_API_URL}/personnels/delete/${id}`);
+        await axios.delete(`http://gestion-hopital-api.vercel.app/personnels/delete/${id}`);
         toast.success('Personnel supprimé !!!')
         fetchPersonnels();
       } catch {

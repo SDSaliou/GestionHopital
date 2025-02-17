@@ -41,7 +41,7 @@ const DossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
   useEffect(() => {
     const fetchDossPatient = async () => {
         try {
-           await axios.get('http://${process.env.NEXT_PUBLIC_API_URL}/dossier/');
+           await axios.get('http://gestion-hopital-api.vercel.app/dossier/');
           fetchDoPatient();
           setLoading(false);
         } catch (error) {
@@ -59,7 +59,7 @@ const DossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
     
     if(selectedDossier){
         try {
-            await axios.put(`http://${process.env.NEXT_PUBLIC_API_URL}/dossier/update/${selectedDossier._id}`, 
+            await axios.put(`http://gestion-hopital-api.vercel.app/dossier/update/${selectedDossier._id}`, 
             selectedDossier );
             toast.success("Dossier mis à jour avec succès !");
             setModifier(false);
@@ -82,7 +82,8 @@ const DossierList: React.FC<DossierListProps> = ({dossierPatient, fetchDoPatient
         return;
     }
     try {
-      await axios.delete(`http://${process.env.NEXT_PUBLIC_API_URL}/dossier/delete/${id}`);
+      await axios.delete(`http://gestion-hopital-api.vercel.app
+/dossier/delete/${id}`);
       toast.success('Dossier supprimé avec succès!');
       fetchDoPatient();
     } catch {

@@ -35,7 +35,7 @@ const RVList: React.FC = () => {
 
   const fetchRendezVous = async () => {
     try {
-      const { data } = await axios.get<RendezVous[]>("http://${process.env.NEXT_PUBLIC_API_URL}/rendezvous/");
+      const { data } = await axios.get<RendezVous[]>("http://gestion-hopital-api.vercel.app/rendezvous/");
       const sortedRv = data.sort((a, b) => (a.patient?.nom || "").localeCompare(b.patient?.nom || ""));
       setRendezVous(sortedRv);
     } catch (error) {
@@ -47,7 +47,7 @@ const RVList: React.FC = () => {
   const fetchMedecins = async () => {
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get<Medecin[]>("http://${process.env.NEXT_PUBLIC_API_URL}/personnels/medecins", {
+      const { data } = await axios.get<Medecin[]>("http://gestion-hopital-api.vercel.app/personnels/medecins", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMedecins(data);
@@ -139,7 +139,7 @@ const RVList: React.FC = () => {
 
     setLoadingEdit(true);
     try {
-      await axios.put(`http://${process.env.NEXT_PUBLIC_API_URL}/rendezvous/update/${editingRV._id}`, editingRV);
+      await axios.put(`http://gestion-hopital-api.vercel.app/rendezvous/update/${editingRV._id}`, editingRV);
       toast.success("Rendez-vous mis à jour avec succès !");
       setEditingRV(null);
       fetchRendezVous();
@@ -156,7 +156,7 @@ const RVList: React.FC = () => {
 
     setLoadingDelete(id);
     try {
-      await axios.delete(`http://${process.env.NEXT_PUBLIC_API_URL}/rendezvous/delete/${id}`);
+      await axios.delete(`http://gestion-hopital-api.vercel.app/rendezvous/delete/${id}`);
       toast.success("Rendez-vous supprimé avec succès !");
       fetchRendezVous();
     } catch (error) {

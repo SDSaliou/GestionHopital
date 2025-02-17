@@ -26,7 +26,8 @@ const Ordonnance: React.FC = () => {
 
     try {
       await axios.get(
-        `http://${process.env.NEXT_PUBLIC_API_URL}/personnels/${userId}`,
+        `http://gestion-hopital-api.vercel.app
+/personnels/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -49,7 +50,7 @@ const Ordonnance: React.FC = () => {
     }
 
     try {
-      const { data } = await axios.get("http://${process.env.NEXT_PUBLIC_API_URL}/ordonnance/", {
+      const { data } = await axios.get("http://gestion-hopital-api.vercel.app/ordonnance/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrdonnances(data);

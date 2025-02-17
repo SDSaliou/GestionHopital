@@ -37,7 +37,7 @@ const RV: React.FC<RVProps> = ({ fetchRV }) => {
   // Récupérer les patients
   const fetchPatients = async () => {
     try {
-      const  resPatient  = await axios.get<Patient[]>("http://${process.env.NEXT_PUBLIC_API_URL}/patients");
+      const  resPatient  = await axios.get<Patient[]>("http://gestion-hopital-api.vercel.app/patients");
       const sortedPatients = resPatient.data
       .sort((a, b) => a.nom.localeCompare(b.nom));
       setPatients(sortedPatients);
@@ -51,7 +51,7 @@ const RV: React.FC<RVProps> = ({ fetchRV }) => {
   const fetchMedecins = async () => {
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get<Medecin[]>("http://${process.env.NEXT_PUBLIC_API_URL}/personnels/medecins", {
+      const { data } = await axios.get<Medecin[]>("http://gestion-hopital-api.vercel.app/personnels/medecins", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const medOr = data
@@ -115,7 +115,7 @@ const RV: React.FC<RVProps> = ({ fetchRV }) => {
 
     setLoading(true);
     try {
-      await axios.post("http://${process.env.NEXT_PUBLIC_API_URL}/rendezvous/add", {
+      await axios.post("http://gestion-hopital-api.vercel.app/rendezvous/add", {
         medecin: selectedMedecin,
         patient: selectedPatient,
         date,

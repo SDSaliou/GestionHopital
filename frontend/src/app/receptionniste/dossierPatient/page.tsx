@@ -11,7 +11,7 @@ const DossiersPage: React.FC = () => {
 
     const fetchDoPatient = async () => {
         try {
-            const response = await axios.get('http://${process.env.NEXT_PUBLIC_API_URL}/dossier');
+            const response = await axios.get('http://gestion-hopital-api.vercel.app/dossier');
             setDossierPatient(response.data); 
             
         } catch (error) {

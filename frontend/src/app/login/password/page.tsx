@@ -20,7 +20,7 @@ const ResetPasswordPage: React.FC = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://${process.env.NEXT_PUBLIC_API_URL}/personnels/reset-password", {
+      const res = await axios.post("http://gestion-hopital-api.vercel.app/personnels/reset-password", {
         codePersonnel,
         password,
       });
