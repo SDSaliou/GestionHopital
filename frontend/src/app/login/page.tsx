@@ -38,8 +38,7 @@ const LoginPage: React.FC = () => {
     
         try {
             
-            const res = await axios.post("https
-s://gestion-hopital-api.vercel.app/personnels/login", {
+            const res = await axios.post("https://gestion-hopital-api.vercel.app/personnels/login", {
                 nom,
                 password,
                 services,
