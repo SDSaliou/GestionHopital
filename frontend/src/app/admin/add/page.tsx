@@ -18,7 +18,7 @@ const AddPersonnelPage: React.FC = () => {
     };
   
     return (
-      <div className='block p-20 mb-4 items-center justify-center '>
+      <div className="container mx-auto px-4 py-6">
          <Personnel fetchPersonnel={fetchPersonnels} />
          <ToastContainer />
       </div>
