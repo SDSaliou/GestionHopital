@@ -100,16 +100,18 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
     };
 
   return (
-    <div className="overflow-x-auto">
     <div className="min-h-screen bg-[url('/Logo.PNG')] bg-cover flex  justify-center items-center">
+      <div className="container mx-auto px-4">
+        <h1 className="text-2xl font-bold text-center mb-6">Liste du Personnel</h1>
+
         {/* Barre de recherche */}
         <div className="mb-6 flex justify-center">
           <input
             type="text"
             placeholder="Rechercher un personnel..."
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm mb-4"
-      />
+            className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
+          />
         </div>
         <ToastContainer />
 
@@ -221,8 +223,9 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
         )}
 
         {/* Table des personnels */}
-        <table className="min-w-full bg-white shadow-md rounded-lg text-sm sm:text-base">
-        <thead className="bg-cyan-500">
+        <div className="overflow-x-auto mb-6">
+          <table className="min-w-full bg-white shadow-md rounded-lg text-sm sm:text-base">
+            <thead className="bg-cyan-500">
               <tr>
                 <th className="p-5 text-left">Nom</th>
                 <th className="py-3 px-4 text-left">Code Personnel</th>
@@ -323,6 +326,7 @@ const PersonnelList: React.FC<PersonnelListProps> = ({ personnels, fetchPersonne
 
 
       </div>
+    </div>
   );
 };
 
